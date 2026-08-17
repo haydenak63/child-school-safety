@@ -32,7 +32,6 @@ export async function POST(request: NextRequest) {
       student: result.student,
       confidence: result.confidence,
       quality: result.quality,
-      diagnostics: result.diagnostics,
       terminal: { name: terminal.name, location: terminal.location },
     });
   } catch (error) {

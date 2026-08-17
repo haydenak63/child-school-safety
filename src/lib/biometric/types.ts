@@ -28,27 +28,12 @@ export type TemplateRecord = {
   template: Template;
 };
 
-export type MatchDiagnostics = {
-  imageWidth: number;
-  imageHeight: number;
-  quality: number;
-  processingMs: number;
-  scores?: {
-    ncc: number;
-    lbp: number;
-    hog: number;
-    dhash: number;
-    combined: number;
-  };
-};
-
 export type MatchResult = {
   matched: boolean;
   studentId?: string;
   score: number;
   confidence: number;
   quality: number;
-  diagnostics: MatchDiagnostics;
 };
 
 export interface BiometricProvider {

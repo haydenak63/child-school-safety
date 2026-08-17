@@ -1,8 +1,6 @@
 import { hashToken } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
 import { TerminalKiosk } from "@/components/terminal-kiosk";
-import { DemoBanner } from "@/components/demo-banner";
-import { isDemoMode } from "@/lib/env";
 
 export default async function TerminalPage({
   params,
@@ -17,7 +15,6 @@ export default async function TerminalPage({
   if (!terminal || terminal.status !== "ACTIVE") {
     return (
       <div className="min-h-screen bg-ink text-white">
-        <DemoBanner />
         <div className="mx-auto max-w-md px-6 py-24 text-center">
           <h1 className="text-2xl font-semibold">Terminal unauthorized</h1>
           <p className="mt-3 text-white/70">
@@ -28,5 +25,5 @@ export default async function TerminalPage({
     );
   }
 
-  return <TerminalKiosk token={token} terminalName={terminal.name} demo={isDemoMode()} />;
+  return <TerminalKiosk token={token} terminalName={terminal.name} />;
 }

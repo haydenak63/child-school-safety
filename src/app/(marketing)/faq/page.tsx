@@ -3,7 +3,7 @@ import { FaqList } from "@/components/marketing/faq-list";
 
 export const metadata: Metadata = {
   title: "FAQ",
-  description: "Answers about Halo enrollment, terminals, attendance, and the biometric prototype.",
+  description: "Answers about Halo enrollment, terminals, attendance, and biometric matching.",
   alternates: { canonical: "/faq" },
 };
 

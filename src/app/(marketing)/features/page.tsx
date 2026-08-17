@@ -38,7 +38,7 @@ const features = [
   },
   {
     title: "Modular biometrics",
-    body: "The camera matcher is a prototype. Dedicated hardware can replace it later.",
+    body: "Matching runs behind a provider interface, so dedicated hardware can replace the camera later.",
   },
 ];
 

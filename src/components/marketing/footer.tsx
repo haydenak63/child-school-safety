@@ -62,8 +62,8 @@ export function MarketingFooter() {
       </div>
       <div className="border-t border-line">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-5 text-xs text-ink-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <p>© {new Date().getFullYear()} Halo. A school attendance prototype.</p>
-          <p>Camera fingerprint matching is not a production biometric system.</p>
+          <p>© {new Date().getFullYear()} Halo. School attendance and child safety.</p>
+          <p>Every arrival. Every departure. Accounted for.</p>
         </div>
       </div>
     </footer>

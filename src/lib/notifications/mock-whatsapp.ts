@@ -31,7 +31,7 @@ export class MockWhatsAppProvider implements NotificationProvider {
   async sendArrivalNotification(input: ArrivalNotificationInput): Promise<NotificationDraft> {
     return {
       channel: "WHATSAPP",
-      recipient: input.recipient,
+      recipient: input.recipients[0].phone,
       message: arrivalMessage(input),
       status: "MOCKED",
     };
@@ -40,7 +40,7 @@ export class MockWhatsAppProvider implements NotificationProvider {
   async sendDepartureNotification(input: DepartureNotificationInput): Promise<NotificationDraft> {
     return {
       channel: "WHATSAPP",
-      recipient: input.recipient,
+      recipient: input.recipients[0].phone,
       message: departureMessage(input),
       status: "MOCKED",
     };

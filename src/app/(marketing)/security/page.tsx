@@ -34,11 +34,7 @@ const items = [
   },
   {
     title: "Notifications",
-    body: "This prototype uses a mock WhatsApp provider. Messages are logged, not sent on a live network.",
-  },
-  {
-    title: "Prototype limits",
-    body: "Camera-based fingerprint matching is a research prototype. It is not a production AFIS or hardware biometric system.",
+    body: "Every parent message is recorded, so schools keep an auditable history of what was sent and when.",
   },
 ];
 
@@ -49,8 +45,8 @@ export default function SecurityPage() {
         <p className="eyebrow">Security</p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight">Built around trust.</h1>
         <p className="mt-4 max-w-2xl text-sm leading-6 text-ink-muted">
-          Halo is designed with controlled access and short-lived enrollment. We do not claim that
-          the current camera matcher is production-grade biometric security.
+          Halo is designed with controlled access, short-lived enrollment, and biometric templates
+          that never leave protected storage.
         </p>
       </Reveal>
       <div className="mt-12 grid gap-4">

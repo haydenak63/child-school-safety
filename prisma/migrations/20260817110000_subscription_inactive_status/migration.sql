@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "IntegrationTestStatus" ADD VALUE 'SUBSCRIPTION_INACTIVE';

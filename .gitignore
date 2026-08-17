@@ -18,6 +18,12 @@
 /out/
 next-build.zip
 next-build.tar.gz
+dash-*.log
+
+# Separate PHP project kept alongside for the WhatsApp integration work.
+# It carries its own live credentials (config.php, config.local*.php) and must
+# never be committed into this repository.
+/iqpigeon/
 
 # production
 /build

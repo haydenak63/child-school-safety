@@ -9,7 +9,7 @@ const faqs = [
   },
   {
     q: "How does enrollment work?",
-    a: "An administrator generates a one-time QR link. A phone opens the enrollment page, captures a fingerprint image, and the prototype creates a protected template.",
+    a: "An administrator generates a one-time QR link. A phone opens the enrollment page, captures a fingerprint image, and Halo creates a protected template.",
   },
   {
     q: "How are terminals used?",
@@ -17,11 +17,7 @@ const faqs = [
   },
   {
     q: "How do parent notifications work?",
-    a: "When attendance is recorded, Halo generates a parent message. In this prototype the WhatsApp provider is mocked and messages are logged rather than sent live.",
-  },
-  {
-    q: "Is the biometric system production-ready?",
-    a: "No. Camera-based fingerprint matching is a prototype. It is not a production biometric security system or dedicated hardware AFIS.",
+    a: "When attendance is recorded, Halo sends the parent a WhatsApp message and keeps a record of it in the dashboard.",
   },
   {
     q: "Can dedicated hardware be used later?",

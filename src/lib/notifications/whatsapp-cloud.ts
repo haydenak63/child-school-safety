@@ -10,7 +10,7 @@ export class WhatsAppCloudProvider implements NotificationProvider {
   async sendArrivalNotification(_input: ArrivalNotificationInput): Promise<NotificationDraft> {
     throw new AppError(
       "SERVER",
-      "WhatsApp Cloud API provider is not enabled in this prototype. Use MockWhatsAppProvider.",
+      "WhatsApp Cloud API provider is not wired yet. Connect the Cloud API credentials here.",
       501,
     );
   }
@@ -18,7 +18,7 @@ export class WhatsAppCloudProvider implements NotificationProvider {
   async sendDepartureNotification(_input: DepartureNotificationInput): Promise<NotificationDraft> {
     throw new AppError(
       "SERVER",
-      "WhatsApp Cloud API provider is not enabled in this prototype. Use MockWhatsAppProvider.",
+      "WhatsApp Cloud API provider is not wired yet. Connect the Cloud API credentials here.",
       501,
     );
   }

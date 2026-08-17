@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { FingerprintCamera } from "@/components/fingerprint-camera";
 import { api, errorMessage } from "@/lib/client/api";
-import { DemoBanner } from "@/components/demo-banner";
 
 type Phase = "ready" | "searching" | "success" | "error";
 
@@ -12,17 +11,14 @@ type SuccessState = {
   eventType: "ARRIVAL" | "DEPARTURE";
   timeLabel: string;
   terminalName: string;
-  confidence: number;
 };
 
 export function TerminalKiosk({
   token,
   terminalName,
-  demo,
 }: {
   token: string;
   terminalName: string;
-  demo: boolean;
 }) {
   const [phase, setPhase] = useState<Phase>("ready");
   const [message, setMessage] = useState("Place your finger in front of the camera.");
@@ -61,7 +57,6 @@ export function TerminalKiosk({
         eventType: recorded.eventType,
         timeLabel: recorded.timeLabel,
         terminalName: recorded.terminal.name,
-        confidence: recorded.confidence,
       });
       setPhase("success");
       window.setTimeout(() => {
@@ -92,8 +87,7 @@ export function TerminalKiosk({
 
   return (
     <div className="min-h-screen bg-ink text-white">
-      <DemoBanner />
-      <div className="mx-auto flex min-h-[calc(100vh-36px)] max-w-lg flex-col px-4 py-8">
+      <div className="mx-auto flex min-h-screen max-w-lg flex-col px-4 py-8">
         <p className="text-center text-xs font-semibold tracking-[0.22em] text-white/40">
           ATTENDANCE TERMINAL
         </p>
@@ -120,11 +114,6 @@ export function TerminalKiosk({
             </p>
             <p className="mt-4 text-ink-muted">{success.timeLabel}</p>
             <p className="text-ink-muted">{success.terminalName}</p>
-            {demo ? (
-              <p className="mt-3 text-xs text-ink-muted">
-                Match confidence {Math.round(success.confidence * 100)}%
-              </p>
-            ) : null}
           </div>
         ) : (
           <div className="mt-6 flex-1">
@@ -132,7 +121,6 @@ export function TerminalKiosk({
               onCapture={onCapture}
               busy={phase === "searching"}
               captureLabel="Scan fingerprint"
-              demo={demo}
               kiosk
             />
           </div>

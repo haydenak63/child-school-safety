@@ -14,7 +14,7 @@ Use a real phone camera. Do not skip enrollment and pretend a match occurred.
 10. Open **Terminals** and scan **Main Entrance**.
 11. On the terminal page, wait until **READY**, then capture the **same** finger.
 12. Confirm the screen shows **ALI AHMED** / **ARRIVED** / time / **Main Entrance**, then resets after ~2 seconds.
-13. Open **Dashboard** and **Attendance**. Confirm an ARRIVAL row and a mock WhatsApp arrival message.
+13. Open **Dashboard** and **Attendance**. Confirm an ARRIVAL row and a WhatsApp arrival message.
 14. Wait 10 seconds (cooldown). Scan again.
 15. Confirm **DEPARTED**, a DEPARTURE row, and a second notification.
 

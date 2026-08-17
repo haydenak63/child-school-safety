@@ -12,6 +12,13 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Separate PHP project, not part of this app's source.
+    "iqpigeon/**",
+    // CommonJS entry points: next.config.js is deliberately not TypeScript so
+    // the production server never loads next-swc, and server.js is cPanel's
+    // Passenger startup file.
+    "next.config.js",
+    "server.js",
   ]),
 ]);
 

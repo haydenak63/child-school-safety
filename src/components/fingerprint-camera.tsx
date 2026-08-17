@@ -1,13 +1,14 @@
 "use client";
 
-import { PointerEvent, useEffect, useRef, useState } from "react";
+import { PointerEvent, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { applyCloseUpFocus, focusAtPoint, openCloseUpCamera } from "@/lib/camera-focus";
+
+const noopSubscribe = () => () => {};
 
 type Props = {
   onCapture: (image: string, meta: { width: number; height: number }) => void;
   busy?: boolean;
   captureLabel?: string;
-  demo?: boolean;
   kiosk?: boolean;
 };
 
@@ -35,7 +36,6 @@ export function FingerprintCamera({
   onCapture,
   busy,
   captureLabel = "Capture Fingerprint",
-  demo = true,
   kiosk = false,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -44,18 +44,21 @@ export function FingerprintCamera({
   const [ready, setReady] = useState(false);
   const [starting, setStarting] = useState(false);
   const [focusing, setFocusing] = useState(false);
-  const [insecure, setInsecure] = useState(false);
-  const [httpsUrl, setHttpsUrl] = useState("");
-  const [dimensions, setDimensions] = useState<{ width: number; height: number } | null>(null);
+  const insecure = useSyncExternalStore(
+    noopSubscribe,
+    () => !window.isSecureContext,
+    () => false,
+  );
+  const httpsUrl = useSyncExternalStore(
+    noopSubscribe,
+    () =>
+      window.isSecureContext
+        ? ""
+        : `https://${window.location.host}${window.location.pathname}${window.location.search}`,
+    () => "",
+  );
 
   useEffect(() => {
-    const secure = window.isSecureContext;
-    setInsecure(!secure);
-    if (!secure) {
-      setHttpsUrl(
-        `https://${window.location.host}${window.location.pathname}${window.location.search}`,
-      );
-    }
     return () => {
       streamRef.current?.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
@@ -74,7 +77,6 @@ export function FingerprintCamera({
     const track = stream.getVideoTracks()[0];
     if (track) await applyCloseUpFocus(track);
     setReady(true);
-    setDimensions({ width: video.videoWidth, height: video.videoHeight });
   }
 
   async function startCamera() {
@@ -138,7 +140,6 @@ export function FingerprintCamera({
     ctx.drawImage(video, sx, sy, cropW, cropH, 0, 0, canvas.width, canvas.height);
     ctx.restore();
     const image = canvas.toDataURL("image/jpeg", 0.92);
-    setDimensions({ width: canvas.width, height: canvas.height });
     onCapture(image, { width: canvas.width, height: canvas.height });
   }
 
@@ -177,11 +178,6 @@ export function FingerprintCamera({
                   : "Enable the camera to begin."}
         </div>
       </div>
-      {demo && dimensions ? (
-        <p className={`text-center text-xs ${kiosk ? "text-white/50" : "text-ink-muted"}`}>
-          Captured image target: {dimensions.width}×{dimensions.height}
-        </p>
-      ) : null}
       {insecure ? (
         <div className="space-y-3 rounded-2xl bg-warn-soft px-4 py-4 text-sm text-warn">
           <p className="font-semibold">Camera access is unavailable on HTTP.</p>

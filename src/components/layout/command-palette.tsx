@@ -9,6 +9,8 @@ const actions = [
   { label: "Attendance", href: "/attendance" },
   { label: "Terminals", href: "/terminals" },
   { label: "Parents", href: "/parents" },
+  { label: "Billing", href: "/settings/billing" },
+  { label: "Integrations", href: "/settings/integrations" },
   { label: "Settings", href: "/settings" },
   { label: "Dashboard", href: "/dashboard" },
 ];

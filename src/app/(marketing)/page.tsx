@@ -157,8 +157,7 @@ export default function HomePage() {
             <h2 className="mt-3 text-3xl font-semibold tracking-tight">Built around trust.</h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-ink-muted">
               Halo uses authenticated admin access, one-time enrollment sessions, expiring tokens,
-              and protected biometric templates. Camera matching in this prototype is not a
-              production-grade biometric system.
+              and protected biometric templates.
             </p>
           </Reveal>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -186,8 +185,8 @@ export default function HomePage() {
           <p className="eyebrow">Parents</p>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight">Parents know when it matters.</h2>
           <p className="mt-3 text-sm leading-6 text-ink-muted">
-            Student enters school. The system records arrival. A parent notification is generated.
-            This prototype uses a mock WhatsApp provider — no live messaging API is connected.
+            Student enters school. The system records arrival. A WhatsApp notification is sent to
+            the parent.
           </p>
         </Reveal>
         <Reveal delay={80}>

@@ -38,11 +38,53 @@ export function formatTime(date: Date, timeZone: string): string {
   }).format(date);
 }
 
+// Feeds parent notification time labels, including IQ Pigeon's `local_time`.
+// The hour is zero-padded to match the agreed wire format ("08:42 AM").
 export function formatTimeShort(date: Date, timeZone: string): string {
   return new Intl.DateTimeFormat("en-US", {
     timeZone,
-    hour: "numeric",
+    hour: "2-digit",
     minute: "2-digit",
     hour12: true,
   }).format(date);
+}
+
+export function formatClock24(date: Date, timeZone: string): string {
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone,
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).format(date);
+}
+
+export function formatDayMonth(date: Date, timeZone: string): string {
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone,
+    day: "numeric",
+    month: "short",
+  }).format(date);
+}
+
+export function weekdayShort(date: Date, timeZone: string): string {
+  return new Intl.DateTimeFormat("en-US", { timeZone, weekday: "short" }).format(date);
+}
+
+export function weekdayNarrow(date: Date, timeZone: string): string {
+  return new Intl.DateTimeFormat("en-US", { timeZone, weekday: "narrow" }).format(date);
+}
+
+export function dayOfMonth(date: Date, timeZone: string): string {
+  return new Intl.DateTimeFormat("en-GB", { timeZone, day: "numeric" }).format(date);
+}
+
+export function formatRelative(date: Date, now = new Date()): string {
+  const minutes = Math.floor(Math.max(0, now.getTime() - date.getTime()) / 60000);
+  if (minutes < 1) return "Just now";
+  if (minutes < 60) return `${minutes} min ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} hr ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days} day${days === 1 ? "" : "s"} ago`;
+  return `${Math.floor(days / 7)} wk ago`;
 }

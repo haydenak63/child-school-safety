@@ -1,10 +1,8 @@
 # Child Safety School Entry & Exit System
 
-Prototype web application for school child safety: enroll a student, capture a fingerprint with a **phone camera**, store a biometric template, then identify the same finger at a gate terminal, record ARRIVAL/DEPARTURE, and generate a parent WhatsApp notification.
+Web application for school child safety: enroll a student, capture a fingerprint with a **phone camera**, store a biometric template, then identify the same finger at a gate terminal, record ARRIVAL/DEPARTURE, and generate a parent WhatsApp notification.
 
-This is a **prototype**, not a production biometric security system. Camera-based fingerprint matching is not production-grade. It does **not** use the phone’s native fingerprint sensor, NADRA, or any external biometric service.
-
-A **DEMO MODE** banner is shown throughout the app.
+Matching runs entirely inside this application. It does **not** use the phone’s native fingerprint sensor, NADRA, or any external biometric service.
 
 ## What works
 
@@ -51,7 +49,6 @@ AUTH_SECRET="dev-only-change-me-use-at-least-32-chars"
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ADMIN_EMAIL="admin@abcschool.test"
 ADMIN_PASSWORD="ChangeMeNow123!"
-NEXT_PUBLIC_DEMO_MODE="true"
 ```
 
 Do not hardcode production credentials. WhatsApp Cloud variables are optional; the mock provider is the default.
@@ -133,7 +130,6 @@ Detailed copy: [docs/manual-testing.md](docs/manual-testing.md).
 3. `npx prisma migrate deploy && npx prisma db seed` (or skip seed in production).
 4. `npm run build && npm start`, or deploy to a Node host (Railway, Render, Fly, a VPS).
 5. Serve over HTTPS so mobile cameras work.
-6. Keep `NEXT_PUBLIC_DEMO_MODE=false` if you want diagnostics hidden.
 
 Vercel can host the Next.js app if the database is reachable. `sharp` is used on the server for image decode.
 
@@ -145,9 +141,9 @@ See [docs/api.md](docs/api.md).
 
 See [docs/biometric.md](docs/biometric.md).
 
-To replace the camera prototype with a hardware scanner later, implement `HardwareFingerprintProvider` with the same `BiometricProvider` methods (`enroll`, `verify`, `identify`) and set `BIOMETRIC_PROVIDER=hardware`. Students, parents, attendance, terminals, notifications, dashboard, and the database schema do not need to change.
+To replace the camera provider with a hardware scanner later, implement `HardwareFingerprintProvider` with the same `BiometricProvider` methods (`enroll`, `verify`, `identify`) and set `BIOMETRIC_PROVIDER=hardware`. Students, parents, attendance, terminals, notifications, dashboard, and the database schema do not need to change.
 
-## Security notes (prototype)
+## Security notes
 
 - Admin passwords are hashed with bcrypt.
 - Admin routes require a session cookie.

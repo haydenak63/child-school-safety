@@ -3,12 +3,12 @@ import { LegalNav } from "@/components/marketing/legal-nav";
 
 export const metadata: Metadata = {
   title: "Terms",
-  description: "Terms for using the Halo school attendance prototype.",
+  description: "Terms for using the Halo school attendance platform.",
   alternates: { canonical: "/terms" },
 };
 
 const sections = [
-  { id: "use", label: "Use of the prototype" },
+  { id: "use", label: "Use of the service" },
   { id: "biometrics", label: "Biometric limits" },
   { id: "accounts", label: "Accounts" },
   { id: "liability", label: "Liability" },
@@ -22,13 +22,14 @@ export default function TermsPage() {
         <div>
           <p className="eyebrow">Legal</p>
           <h1 className="mt-3 text-4xl font-semibold tracking-tight text-ink">Terms of service</h1>
-          <p className="mt-3">These terms apply to the Halo prototype. They are not a substitute for a production contract.</p>
+          <p className="mt-3">These terms apply to schools and administrators using Halo.</p>
         </div>
         <section id="use">
-          <h2 className="text-xl font-semibold text-ink">Use of the prototype</h2>
+          <h2 className="text-xl font-semibold text-ink">Use of the service</h2>
           <p className="mt-3">
-            Halo is provided for demonstration and evaluation of school attendance workflows. It
-            should not be treated as a finished production safety system.
+            Halo supports school attendance workflows: enrollment, gate terminals, attendance
+            records, and parent notifications. Schools remain responsible for their own gate
+            supervision procedures.
           </p>
         </section>
         <section id="biometrics">
@@ -48,7 +49,7 @@ export default function TermsPage() {
         <section id="liability">
           <h2 className="text-xl font-semibold text-ink">Liability</h2>
           <p className="mt-3">
-            The prototype is provided as-is. No warranty is made that identification, attendance, or
+            Halo is provided as-is. No warranty is made that identification, attendance, or
             notifications will be complete or uninterrupted.
           </p>
         </section>

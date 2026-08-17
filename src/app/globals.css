@@ -20,6 +20,19 @@
   --shadow: 0 1px 2px rgba(20, 22, 28, 0.04), 0 12px 32px rgba(20, 22, 28, 0.05);
   --radius: 20px;
   --ease: 180ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Accent family behind the dashboard tiles and icon chips. Soft pairs with a
+     matching ink so tinted chips stay legible on the light canvas. */
+  --tint-violet: #eeebfd;
+  --tint-rose: #fdeaed;
+  --tint-sky: #e7f1fb;
+  --tint-amber: #fdf1e0;
+  --tint-teal: #e6f2f1;
+  --ink-violet: #4f43c8;
+  --ink-rose: #cf2b46;
+  --ink-sky: #12599f;
+  --ink-amber: #b3670c;
+  --ink-teal: #2f6f6a;
 }
 
 @theme inline {
@@ -39,6 +52,16 @@
   --color-warn-soft: var(--warn-soft);
   --color-danger: var(--danger);
   --color-danger-soft: var(--danger-soft);
+  --color-tint-violet: var(--tint-violet);
+  --color-tint-rose: var(--tint-rose);
+  --color-tint-sky: var(--tint-sky);
+  --color-tint-amber: var(--tint-amber);
+  --color-tint-teal: var(--tint-teal);
+  --color-ink-violet: var(--ink-violet);
+  --color-ink-rose: var(--ink-rose);
+  --color-ink-sky: var(--ink-sky);
+  --color-ink-amber: var(--ink-amber);
+  --color-ink-teal: var(--ink-teal);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -68,6 +91,25 @@ textarea {
 
 .halo-shadow {
   box-shadow: var(--shadow);
+}
+
+/* Dashboard stat tiles. Saturated on purpose: these four are the only place in
+   the product that carries strong colour, so the metrics read at a glance from
+   across a room. */
+.tile-violet {
+  background-image: linear-gradient(135deg, #4f43c8 0%, #6b56e8 55%, #8168f2 100%);
+}
+
+.tile-rose {
+  background-image: linear-gradient(135deg, #cf2b46 0%, #e8465f 55%, #f4657a 100%);
+}
+
+.tile-sky {
+  background-image: linear-gradient(135deg, #12599f 0%, #1f7fd0 55%, #2f9ae6 100%);
+}
+
+.tile-amber {
+  background-image: linear-gradient(135deg, #c85c0d 0%, #e2860f 55%, #f2a81d 100%);
 }
 
 .eyebrow {

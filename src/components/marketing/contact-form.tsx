@@ -39,8 +39,7 @@ export function ContactForm({ intent = "contact" }: { intent?: "contact" | "demo
       <div className="rounded-[24px] border border-line bg-surface p-6">
         <p className="text-lg font-semibold">Request received.</p>
         <p className="mt-2 text-sm leading-6 text-ink-muted">
-          This prototype stores the request on the server for review. It is not forwarded to a live
-          inbox.
+          Your request has been recorded and our team will review it shortly.
         </p>
       </div>
     );

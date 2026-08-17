@@ -43,7 +43,7 @@ export function HeroVisual() {
       <div className="absolute -right-2 top-16 hidden w-44 rounded-2xl border border-line bg-surface p-3 halo-shadow sm:block animate-fade-up">
         <p className="text-[11px] font-semibold tracking-[0.14em] text-ink-muted">IDENTITY</p>
         <p className="mt-1 text-sm font-semibold">Verified at gate</p>
-        <p className="mt-1 text-xs text-ink-muted">Prototype camera match</p>
+        <p className="mt-1 text-xs text-ink-muted">Camera fingerprint match</p>
       </div>
     </div>
   );

@@ -17,10 +17,9 @@ export default function AboutPage() {
           built for operators who need a serious product, not a cluttered administration template.
         </p>
         <p>
-          The current system is a working prototype: students, parents, enrollment, camera
-          fingerprint matching, attendance terminals, and mock parent notifications. Dedicated
-          biometric hardware can replace the camera provider later without changing the rest of the
-          product.
+          The system covers students, parents, enrollment, camera fingerprint matching, attendance
+          terminals, and parent notifications. Dedicated biometric hardware can replace the camera
+          provider later without changing the rest of the product.
         </p>
         <p>
           We do not use fear-based language. The goal is simple: give schools and families greater

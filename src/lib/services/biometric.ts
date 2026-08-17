@@ -1,9 +1,7 @@
 import { AppError } from "@/lib/errors";
-import { recordDiagnostic } from "@/lib/biometric/diagnostics";
 import { getBiometricProvider } from "@/lib/biometric/provider";
 import { openTemplate, sealTemplate } from "@/lib/biometric/storage";
 import { decodeDataUrl } from "@/lib/biometric/image";
-import { isDemoMode } from "@/lib/env";
 import { prisma } from "@/lib/prisma";
 import { fullName } from "@/lib/names";
 
@@ -26,23 +24,10 @@ export async function enrollFingerprintFromCapture(options: {
     },
   });
 
-  recordDiagnostic({
-    action: "enroll",
-    imageWidth: 192,
-    imageHeight: 256,
-    quality: template.quality,
-    processingMs: Date.now() - startedAt,
-    templateCreated: true,
-    note: "Template stored. Raw image discarded.",
-  });
-
   return {
     enrolled: true,
     quality: template.quality,
     processingMs: Date.now() - startedAt,
-    diagnostics: isDemoMode()
-      ? { imageWidth: 192, imageHeight: 256, quality: template.quality, templateCreated: true }
-      : undefined,
   };
 }
 
@@ -62,31 +47,13 @@ export async function identifyFingerprint(options: {
     template: openTemplate(row.templateData),
   }));
 
-  const startedAt = Date.now();
   const result = await getBiometricProvider().identify(buffer, gallery, options.threshold);
-
-  recordDiagnostic({
-    action: "identify",
-    imageWidth: result.diagnostics.imageWidth,
-    imageHeight: result.diagnostics.imageHeight,
-    quality: result.quality,
-    confidence: result.confidence,
-    matched: result.matched,
-    processingMs: Date.now() - startedAt,
-  });
 
   if (!result.matched || !result.studentId) {
     throw new AppError(
       "NO_MATCH",
       "No student matched. Please reposition your finger and try again.",
       404,
-      isDemoMode()
-        ? {
-            confidence: result.confidence,
-            quality: result.quality,
-            processingMs: result.diagnostics.processingMs,
-          }
-        : undefined,
     );
   }
 
@@ -104,6 +71,5 @@ export async function identifyFingerprint(options: {
     },
     confidence: result.confidence,
     quality: result.quality,
-    diagnostics: isDemoMode() ? result.diagnostics : undefined,
   };
 }

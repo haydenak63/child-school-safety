@@ -52,10 +52,6 @@ export function allowedOrigins(request: Request): Set<string> {
   return origins;
 }
 
-export function isDemoMode(): boolean {
-  return process.env.NEXT_PUBLIC_DEMO_MODE !== "false";
-}
-
 export function getBiometricProviderName(): "camera" | "hardware" {
   return process.env.BIOMETRIC_PROVIDER === "hardware" ? "hardware" : "camera";
 }

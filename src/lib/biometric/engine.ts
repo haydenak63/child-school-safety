@@ -360,7 +360,6 @@ function shiftedProbe(image: GrayImage, dx: number, dy: number): GrayImage {
 export function matchTemplate(
   image: GrayImage,
   candidate: FingerprintTemplatePayload,
-  startedAt = Date.now(),
 ): MatchResult {
   const prepared = preprocess(image);
   const quality = assessQuality(prepared);
@@ -382,13 +381,6 @@ export function matchTemplate(
     score: best.combined,
     confidence: clamp(best.combined, 0, 1),
     quality: quality.quality,
-    diagnostics: {
-      imageWidth: image.width,
-      imageHeight: image.height,
-      quality: quality.quality,
-      processingMs: Date.now() - startedAt,
-      scores: best,
-    },
   };
 }
 
@@ -397,12 +389,11 @@ export function identifyTemplate(
   gallery: Array<{ studentId: string; template: FingerprintTemplatePayload }>,
   threshold: number,
 ): MatchResult {
-  const startedAt = Date.now();
   assertUsableFingerprint(image);
   let best: MatchResult | undefined;
 
   for (const item of gallery) {
-    const result = matchTemplate(image, item.template, startedAt);
+    const result = matchTemplate(image, item.template);
     if (!best || result.score > best.score) {
       best = { ...result, studentId: item.studentId };
     }

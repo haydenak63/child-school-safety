@@ -3,7 +3,7 @@ import { LegalNav } from "@/components/marketing/legal-nav";
 
 export const metadata: Metadata = {
   title: "Privacy",
-  description: "How the Halo prototype handles school, student, and biometric data.",
+  description: "How Halo handles school, student, and biometric data.",
   alternates: { canonical: "/privacy" },
 };
 
@@ -23,12 +23,12 @@ export default function PrivacyPage() {
         <div>
           <p className="eyebrow">Legal</p>
           <h1 className="mt-3 text-4xl font-semibold tracking-tight text-ink">Privacy policy</h1>
-          <p className="mt-3">This document describes the Halo prototype. It is not a certified privacy program.</p>
+          <p className="mt-3">This document describes how Halo handles the data schools entrust to it.</p>
         </div>
         <section id="scope">
           <h2 className="text-xl font-semibold text-ink">Scope</h2>
           <p className="mt-3">
-            Halo is a school attendance prototype. It processes administrator accounts, student and
+            Halo is a school attendance platform. It processes administrator accounts, student and
             parent records, attendance events, and camera-captured fingerprint images used to create
             protected templates.
           </p>
@@ -44,24 +44,23 @@ export default function PrivacyPage() {
         <section id="biometrics">
           <h2 className="text-xl font-semibold text-ink">Biometrics</h2>
           <p className="mt-3">
-            Fingerprint capture uses the device camera. Matching is a prototype comparison, not a
-            production biometric security system. Templates are stored in protected form and are
-            never displayed in the interface.
+            Fingerprint capture uses the device camera. The captured image is converted to a
+            template and discarded. Templates are stored in protected form and are never displayed
+            in the interface.
           </p>
         </section>
         <section id="notifications">
           <h2 className="text-xl font-semibold text-ink">Notifications</h2>
           <p className="mt-3">
-            Parent messages are generated through a mock WhatsApp provider. They are logged for
-            demonstration and are not sent over a live messaging network.
+            Parent messages are sent over WhatsApp and logged so administrators can see what was
+            sent, to which number, and when.
           </p>
         </section>
         <section id="retention">
           <h2 className="text-xl font-semibold text-ink">Retention</h2>
           <p className="mt-3">
             Data remains in the school’s database until an administrator removes or deactivates the
-            related records. This prototype does not offer automated cross-border transfer controls
-            or third-party certifications.
+            related records.
           </p>
         </section>
       </article>

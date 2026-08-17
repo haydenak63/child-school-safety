@@ -17,21 +17,130 @@ model School {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
-  admins    Admin[]
-  students  Student[]
-  parents   Parent[]
-  terminals Terminal[]
+  admins       Admin[]
+  students     Student[]
+  parents      Parent[]
+  terminals    Terminal[]
+  integration  SchoolIntegration?
+  subscription SchoolSubscription?
+}
+
+enum IntegrationTestStatus {
+  OK
+  AUTH_FAILED
+  REMOTE_DISABLED
+  SUBSCRIPTION_INACTIVE
+  INVALID_PAYLOAD
+  RATE_LIMITED
+  SERVER_ERROR
+  UNREACHABLE
+  UNEXPECTED
+}
+
+/// Per-school IQ Pigeon connection. Credentials belong to the school's own IQ
+/// Pigeon client account, so they live here rather than in the environment.
+model SchoolIntegration {
+  id              String                 @id @default(cuid())
+  schoolId        String                 @unique
+  enabled         Boolean                @default(false)
+  baseUrl         String
+  apiKeyEncrypted String                 @db.Text
+  apiKeyHint      String
+  secretEncrypted String                 @db.Text
+  secretHint      String
+  lastTestedAt    DateTime?
+  lastStatus      IntegrationTestStatus?
+  lastError       String?                @db.Text
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 }
 
 model Admin {
-  id           String   @id @default(cuid())
-  schoolId     String
-  email        String   @unique
-  passwordHash String
-  name         String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  school       School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  id                String   @id @default(cuid())
+  schoolId          String
+  email             String   @unique
+  passwordHash      String
+  name              String
+  platformOperator  Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  school            School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+}
+
+enum BillingPlan {
+  STARTER
+  GROWTH
+  CAMPUS
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  PAUSED
+  CANCELED
+}
+
+enum GatewayMode {
+  TEST
+  LIVE
+}
+
+/// One row per school. Plan changes through checkout stay blocked until
+/// PlatformSettings.billingEnabled is turned on.
+model SchoolSubscription {
+  id               String             @id @default(cuid())
+  schoolId         String             @unique
+  plan             BillingPlan        @default(STARTER)
+  status           SubscriptionStatus @default(TRIALING)
+  trialEndsAt      DateTime?
+  currentPeriodEnd DateTime?
+  assignedManually Boolean            @default(true)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  school           School             @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+}
+
+/// Singleton platform config (id = "default"). Gateway secrets are encrypted
+/// with AUTH_SECRET. billingEnabled stays false until a gateway is ready.
+model PlatformSettings {
+  id        String   @id @default("default")
+  updatedAt DateTime @updatedAt
+
+  billingEnabled Boolean @default(false)
+  currency       String  @default("PKR")
+  trialDays      Int     @default(14)
+
+  stripeEnabled                 Boolean     @default(false)
+  stripeMode                    GatewayMode @default(TEST)
+  stripePublishableKey          String?
+  stripeSecretEncrypted         String?     @db.Text
+  stripeSecretHint              String?
+  stripeWebhookSecretEncrypted  String?     @db.Text
+  stripeWebhookHint             String?
+
+  paypakEnabled         Boolean @default(false)
+  paypakMerchantId      String?
+  paypakApiUrl          String?
+  paypakSecretEncrypted String? @db.Text
+  paypakSecretHint      String?
+
+  jazzcashEnabled                  Boolean @default(false)
+  jazzcashMerchantId               String?
+  jazzcashPasswordEncrypted        String? @db.Text
+  jazzcashPasswordHint             String?
+  jazzcashIntegrityEncrypted       String? @db.Text
+  jazzcashIntegrityHint            String?
+
+  smtpEnabled       Boolean @default(false)
+  smtpHost          String?
+  smtpPort          Int     @default(587)
+  smtpUser          String?
+  smtpFrom          String?
+  smtpPassEncrypted String? @db.Text
+  smtpPassHint      String?
 }
 
 enum StudentStatus {

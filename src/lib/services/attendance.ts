@@ -1,7 +1,8 @@
 import { AppError } from "@/lib/errors";
 import { formatTime, formatTimeShort } from "@/lib/dates";
 import { isWithinCooldown, remainingCooldownSeconds, resolveEventType } from "@/lib/attendance/logic";
-import { notificationService } from "@/lib/notifications/service";
+import { sendAttendanceNotification } from "@/lib/notifications/service";
+import type { ArrivalNotificationInput } from "@/lib/notifications/types";
 import { prisma } from "@/lib/prisma";
 import { fullName } from "@/lib/names";
 import { todayRange } from "@/lib/services/school-day";
@@ -72,17 +73,18 @@ export async function recordAttendanceEvent(options: {
   const parent = student.parents[0]?.parent;
   let notification = null;
   if (parent) {
-    const payload = {
+    const payload: ArrivalNotificationInput = {
+      eventId: event.id,
       studentName: fullName(student),
+      studentReference: student.studentNumber,
       schoolName: school.name,
+      schoolTimezone: school.timezone,
+      occurredAt: now,
       time: formatTimeShort(now, school.timezone),
       gate: terminal.name,
-      recipient: parent.whatsappNumber,
+      recipients: [{ name: parent.name, phone: parent.whatsappNumber }],
     };
-    const draft =
-      eventType === "ARRIVAL"
-        ? await notificationService.sendArrivalNotification(payload)
-        : await notificationService.sendDepartureNotification(payload);
+    const draft = await sendAttendanceNotification(school.id, eventType, payload);
 
     notification = await prisma.notificationLog.create({
       data: {

@@ -122,7 +122,7 @@ Returns name, location, status, last activity, URL, and QR data URL.
 
 ### POST `/api/notifications/test`
 
-Admin only. Generates a mock WhatsApp payload without a live API.
+Admin only. Sends a test notification through the configured WhatsApp provider.
 
 ## Settings
 

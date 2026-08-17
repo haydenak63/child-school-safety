@@ -1,4 +1,3 @@
-import { DemoBanner } from "@/components/demo-banner";
 import { AdminShell } from "@/components/admin-shell";
 import { CommandPalette } from "@/components/layout/command-palette";
 import { requireAdminPage } from "@/lib/auth/guards";
@@ -11,12 +10,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const school = await prisma.school.findUnique({ where: { id: session.schoolId } });
 
   return (
-    <>
-      <DemoBanner />
-      <AdminShell schoolName={school?.name ?? "School"} adminName={session.name}>
-        <CommandPalette />
-        {children}
-      </AdminShell>
-    </>
+    <AdminShell schoolName={school?.name ?? "School"} adminName={session.name}>
+      <CommandPalette />
+      {children}
+    </AdminShell>
   );
 }

@@ -2,7 +2,6 @@ import { hashToken } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
 import { evaluateEnrollmentSession } from "@/lib/services/enrollment";
 import { EnrollCapture } from "@/components/enroll-capture";
-import { DemoBanner } from "@/components/demo-banner";
 import { fullName } from "@/lib/names";
 
 export default async function MobileEnrollPage({
@@ -52,7 +51,6 @@ export default async function MobileEnrollPage({
 function Message({ title, body }: { title: string; body: string }) {
   return (
     <div className="min-h-screen bg-canvas">
-      <DemoBanner />
       <div className="mx-auto max-w-md px-6 py-24 text-center">
         <h1 className="text-2xl font-semibold">{title}</h1>
         <p className="mt-3 text-ink-muted">{body}</p>

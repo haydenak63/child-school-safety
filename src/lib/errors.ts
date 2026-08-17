@@ -3,6 +3,7 @@ export type ErrorCode =
   | "FORBIDDEN"
   | "NOT_FOUND"
   | "VALIDATION"
+  | "BILLING_DISABLED"
   | "RATE_LIMITED"
   | "ENROLLMENT_EXPIRED"
   | "ENROLLMENT_USED"

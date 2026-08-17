@@ -14,8 +14,8 @@ export default function ContactPage() {
         <p className="eyebrow">Contact</p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight">Let’s make school arrivals safer.</h1>
         <p className="mt-4 max-w-md text-sm leading-6 text-ink-muted">
-          Tell us about your school. This form is part of the prototype and does not send mail to a
-          public company address.
+          Tell us about your school — size, gates, and how you handle arrivals today. We will get
+          back to you with next steps.
         </p>
       </div>
       <ContactForm />

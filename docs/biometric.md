@@ -1,10 +1,8 @@
 # Biometric architecture
 
-## Prototype constraint
+## Capture constraint
 
 Fingerprint capture uses the **phone camera** (`getUserMedia`), not Android/iOS biometric APIs and not a government or cloud AFIS. Images are processed in this application only.
-
-This matcher is **not** production-grade fingerprint recognition. It is a real comparison of the captured finger image so the demo loop can complete without faking a match.
 
 ## Why not SourceAFIS?
 
@@ -57,7 +55,3 @@ Students, parents, attendance, terminals, notifications, dashboard, and Prisma m
 5. Leave attendance event types, cooldown, WhatsApp notifications, and admin UI unchanged.
 
 Keep `FingerprintTemplate.templateData` as an opaque encrypted string so the column does not need to change.
-
-## Diagnostics
-
-With `NEXT_PUBLIC_DEMO_MODE=true`, `/settings/diagnostics` shows capture dimensions, quality, confidence, processing time, and match outcome. Template bytes are never shown.

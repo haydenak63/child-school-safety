@@ -65,12 +65,17 @@ export const fieldClass =
 export function Card({
   children,
   className = "",
+  radius = "default",
 }: {
   children: ReactNode;
   className?: string;
+  // "tight" is a 16px corner for dense, data-heavy panels on small screens,
+  // where the 20px default reads as oversized.
+  radius?: "default" | "tight";
 }) {
+  const corner = radius === "tight" ? "rounded-2xl" : "rounded-[var(--radius)]";
   return (
-    <div className={`rounded-[var(--radius)] border border-line bg-surface halo-shadow ${className}`}>
+    <div className={`${corner} border border-line bg-surface halo-shadow ${className}`}>
       {children}
     </div>
   );

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { DemoBanner } from "@/components/demo-banner";
 import { Logo } from "@/components/brand/logo";
 import { fieldClass } from "@/components/ui/primitives";
 
@@ -27,8 +26,7 @@ export default async function LoginPage({
 
   return (
     <div className="min-h-screen bg-canvas">
-      <DemoBanner />
-      <div className="grid min-h-[calc(100vh-36px)] lg:grid-cols-2">
+      <div className="grid min-h-screen lg:grid-cols-2">
         <section className="relative hidden overflow-hidden bg-brand px-12 py-16 text-white lg:flex lg:flex-col lg:justify-between">
           <Logo className="text-white [&>span:last-child]:text-white" />
           <div className="max-w-md">
@@ -44,7 +42,7 @@ export default async function LoginPage({
               Sign in to manage students, enrollment, terminals, and parent notifications.
             </p>
           </div>
-          <p className="text-xs text-white/50">Camera fingerprint matching is a prototype.</p>
+          <p className="text-xs text-white/50">Secure attendance and child safety for schools.</p>
         </section>
 
         <section className="flex items-center justify-center px-4 py-12">

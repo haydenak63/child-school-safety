@@ -66,7 +66,26 @@ async function main() {
       email,
       passwordHash: await bcrypt.hash(password, 12),
       name: "School Admin",
+      platformOperator: true,
     },
+  });
+
+  const trialEndsAt = new Date();
+  trialEndsAt.setDate(trialEndsAt.getDate() + 14);
+  await prisma.schoolSubscription.create({
+    data: {
+      schoolId: school.id,
+      plan: "STARTER",
+      status: "TRIALING",
+      trialEndsAt,
+      assignedManually: true,
+    },
+  });
+
+  await prisma.platformSettings.upsert({
+    where: { id: "default" },
+    create: { id: "default", billingEnabled: false },
+    update: {},
   });
 
   const students = await prisma.student.createManyAndReturn({
