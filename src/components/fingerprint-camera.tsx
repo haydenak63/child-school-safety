@@ -3,9 +3,9 @@
 import { ChangeEvent, PointerEvent, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import {
   applyCloseUpFocus,
+  cameraPolicyAllows,
   focusAtPoint,
   openCloseUpCamera,
-  prefersAutoCameraStart,
 } from "@/lib/camera-focus";
 
 const noopSubscribe = () => () => {};
@@ -26,7 +26,7 @@ function cameraErrorMessage(err: unknown): string {
   }
   const name = err instanceof DOMException ? err.name : "";
   if (name === "NotAllowedError" || name === "PermissionDeniedError") {
-    return "Chrome blocked the camera. Tap Allow on the permission prompt, or enable Camera for this site in Chrome settings.";
+    return "Chrome blocked the in-page camera. Allow Pop-ups and redirects for this site, or tap Open camera app below.";
   }
   if (name === "NotFoundError" || name === "OverconstrainedError") {
     return "No camera was found. Close other camera apps and try again.";
@@ -38,6 +38,31 @@ function cameraErrorMessage(err: unknown): string {
     return "This browser cannot access the camera. Use the camera app button below.";
   }
   return err instanceof Error ? err.message : "Could not start the camera.";
+}
+
+function CameraAllowHelp({ kiosk }: { kiosk: boolean }) {
+  const box = kiosk
+    ? "rounded-2xl border border-white/20 bg-white/10 px-4 py-4 text-sm text-white/85"
+    : "rounded-2xl border border-line bg-surface px-4 py-4 text-sm text-ink-soft";
+  const title = kiosk ? "text-white" : "text-ink";
+  return (
+    <details className={box}>
+      <summary className={`cursor-pointer font-semibold ${title}`}>
+        Camera not asking? Allow it manually
+      </summary>
+      <ol className="mt-3 list-decimal space-y-2 pl-5 leading-6">
+        <li>Chrome menu (⋮) → Settings → Site settings → Pop-ups and redirects → Allowed.</li>
+        <li>Same Site settings → Camera. If css.iqpigeon.com is listed as Blocked, tap it → Allow.</li>
+        <li>Chrome menu → Settings → Site settings → All sites → css.iqpigeon.com → Clear &amp; reset.</li>
+        <li>Reload this page. Tap Enable camera and Allow on the popup. If no popup appears, tap Open camera app.</li>
+      </ol>
+      <p className="mt-3 leading-6">
+        The lock icon next to the address will not show Camera until Chrome has asked once. Phone
+        Settings → Apps → Chrome → Camera can be Allow and the site can still be blocked inside
+        Chrome.
+      </p>
+    </details>
+  );
 }
 
 function fingerprintJpegFromSource(
@@ -132,43 +157,50 @@ export function FingerprintCamera({
     setReady(true);
   }
 
-  async function startCamera() {
+  function startCamera() {
     if (startingRef.current || ready) return;
+    if (!window.isSecureContext) {
+      setError(cameraErrorMessage(new Error("insecure")));
+      return;
+    }
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setError(cameraErrorMessage(new Error("unsupported")));
+      return;
+    }
+    if (!cameraPolicyAllows()) {
+      setError("This browser is blocking camera on the page. Tap Open camera app instead.");
+      return;
+    }
     startingRef.current = true;
+    // Start getUserMedia in this tap so Chrome can show the Allow popup.
+    const work = openCloseUpCamera();
     setError(null);
     setStarting(true);
-    try {
-      if (!window.isSecureContext) throw new Error("insecure");
-      if (!navigator.mediaDevices?.getUserMedia) throw new Error("unsupported");
-      const stream = await openCloseUpCamera();
-      await attachStream(stream);
-    } catch (err) {
-      streamRef.current?.getTracks().forEach((track) => track.stop());
-      streamRef.current = null;
-      setReady(false);
-      setError(cameraErrorMessage(err));
-    } finally {
-      startingRef.current = false;
-      setStarting(false);
-    }
+    void work
+      .then((stream) => attachStream(stream))
+      .catch((err) => {
+        streamRef.current?.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
+        setReady(false);
+        setError(cameraErrorMessage(err));
+      })
+      .finally(() => {
+        startingRef.current = false;
+        setStarting(false);
+      });
   }
 
   useEffect(() => {
-    if (prefersAutoCameraStart()) {
-      void startCamera();
-    }
     return () => {
       streamRef.current?.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
     };
-    // Start once when the QR enrollment / terminal page opens.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function onTapPreview(event: PointerEvent<HTMLDivElement>) {
     if (!ready) {
       event.preventDefault();
-      await startCamera();
+      fileRef.current?.click();
       return;
     }
     const track = streamRef.current?.getVideoTracks()[0];
@@ -244,7 +276,7 @@ export function FingerprintCamera({
                 ? "Processing…"
                 : ready
                   ? "Hold the finger 8–12 cm away, fill the oval, then tap to focus."
-                  : "Tap the oval, then tap Allow when Chrome asks for the camera."}
+                  : "Tap Enable camera. Chrome should show an Allow popup. If it does not, tap Open camera app."}
         </div>
         {!ready && !starting ? (
           <button
@@ -252,12 +284,12 @@ export function FingerprintCamera({
             onPointerDown={(event) => event.stopPropagation()}
             onClick={(event) => {
               event.stopPropagation();
-              void startCamera();
+              fileRef.current?.click();
             }}
             disabled={insecure}
             className="absolute inset-x-6 bottom-6 z-10 min-h-12 rounded-2xl bg-white px-4 text-sm font-semibold text-ink"
           >
-            Enable camera
+            Open camera app
           </button>
         ) : null}
       </div>
@@ -276,6 +308,7 @@ export function FingerprintCamera({
         </div>
       ) : null}
       {error ? <p className="rounded-2xl bg-danger-soft px-4 py-3 text-sm text-danger">{error}</p> : null}
+      {!ready ? <CameraAllowHelp kiosk={kiosk} /> : null}
       <input
         ref={fileRef}
         type="file"
@@ -286,11 +319,11 @@ export function FingerprintCamera({
       />
       {!ready ? (
         <div className="grid gap-3">
-          <button type="button" onClick={startCamera} disabled={starting || insecure} className={primary}>
-            {starting ? "Waiting for permission..." : "Enable camera"}
+          <button type="button" onClick={() => fileRef.current?.click()} className={primary}>
+            Open camera app
           </button>
-          <button type="button" onClick={() => fileRef.current?.click()} className={secondary}>
-            Use camera app instead
+          <button type="button" onClick={startCamera} disabled={starting || insecure} className={secondary}>
+            {starting ? "Waiting for permission..." : "Enable in-page camera"}
           </button>
         </div>
       ) : (

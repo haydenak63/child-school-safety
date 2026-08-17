@@ -29,12 +29,15 @@ async function requestVideo(constraints: MediaTrackConstraints | true): Promise<
   return navigator.mediaDevices.getUserMedia({ audio: false, video: constraints });
 }
 
-export function prefersAutoCameraStart(): boolean {
-  if (typeof navigator === "undefined" || typeof window === "undefined") return false;
-  if (!window.isSecureContext) return false;
-  const ua = navigator.userAgent || "";
-  const iOS = /iP(hone|ad|od)/.test(ua) || (/Macintosh/.test(ua) && "ontouchend" in document);
-  return !iOS;
+export function cameraPolicyAllows(): boolean {
+  if (typeof document === "undefined") return true;
+  const doc = document as Document & {
+    permissionsPolicy?: { allowsFeature: (name: string) => boolean };
+    featurePolicy?: { allowsFeature: (name: string) => boolean };
+  };
+  const policy = doc.permissionsPolicy ?? doc.featurePolicy;
+  if (!policy?.allowsFeature) return true;
+  return policy.allowsFeature("camera");
 }
 
 export async function openCloseUpCamera(): Promise<MediaStream> {
@@ -42,27 +45,8 @@ export async function openCloseUpCamera(): Promise<MediaStream> {
     throw new DOMException("Camera API is not available.", "NotSupportedError");
   }
 
-  // Chrome Android only shows the permission prompt on a simple video request.
-  // High-res / exact-device constraints come after access is granted.
-  const permissionAttempts: Array<MediaTrackConstraints | true> = [
-    { facingMode: { ideal: "environment" } },
-    { facingMode: "environment" },
-    true,
-  ];
-
-  let seed: MediaStream | null = null;
-  let lastError: unknown;
-  for (const constraints of permissionAttempts) {
-    try {
-      seed = await requestVideo(constraints);
-      break;
-    } catch (error) {
-      lastError = error;
-    }
-  }
-  if (!seed) {
-    throw lastError instanceof Error ? lastError : new Error("Could not start the camera.");
-  }
+  // One simple request from a tap so Chrome can show the Allow popup.
+  const seed = await requestVideo(true);
 
   const devices = await navigator.mediaDevices.enumerateDevices();
   const cameras = devices.filter((device) => device.kind === "videoinput");
