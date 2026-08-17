@@ -6,6 +6,7 @@
     "dev": "node scripts/dev.mjs",
     "dev:https": "next dev --experimental-https -p 3443",
     "build": "prisma generate && next build",
+    "package:build": "powershell -ExecutionPolicy Bypass -File scripts/package-build.ps1",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
