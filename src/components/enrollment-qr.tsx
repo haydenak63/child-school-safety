@@ -73,18 +73,27 @@ export function EnrollmentQr({
         <h2 className="mt-2 text-xl font-semibold">{studentName}</h2>
         <p className="text-sm text-ink-muted">{classLabel}</p>
         <p className="mt-4 text-sm leading-6 text-ink-muted">
-          Scan this QR code with the mobile phone. The enrollment session expires automatically and
-          the fingerprint template is never displayed.
+          Scan this QR with the phone camera, or tap it to open enrollment on this device. Chrome
+          will ask for camera permission so you can capture the fingerprint. The session expires
+          automatically and the template is never displayed.
         </p>
       </Card>
 
       <Card className="p-6 text-center">
         {data ? (
           <>
-            <img src={data.qrDataUrl} alt="Enrollment QR code" className="mx-auto h-56 w-56" />
+            <a
+              href={data.url}
+              className="mx-auto block w-fit rounded-2xl focus-visible:ring-2 focus-visible:ring-brand/40"
+            >
+              <img src={data.qrDataUrl} alt="Open fingerprint enrollment camera" className="h-56 w-56" />
+            </a>
             <p className="mt-4 text-lg font-semibold">Expires in {minutes}:{seconds}</p>
             <p className="mt-2 break-all text-xs text-ink-muted">{data.url}</p>
             <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-center">
+              <Button href={data.url} className="w-full sm:w-auto">
+                Open camera on this phone
+              </Button>
               <Button
                 type="button"
                 variant="secondary"

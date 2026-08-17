@@ -21,15 +21,48 @@ function scoreRearCamera(label: string): number {
   return 3;
 }
 
+function stopTracks(stream: MediaStream | null | undefined) {
+  stream?.getTracks().forEach((track) => track.stop());
+}
+
+async function requestVideo(constraints: MediaTrackConstraints | true): Promise<MediaStream> {
+  return navigator.mediaDevices.getUserMedia({ audio: false, video: constraints });
+}
+
+export function prefersAutoCameraStart(): boolean {
+  if (typeof navigator === "undefined" || typeof window === "undefined") return false;
+  if (!window.isSecureContext) return false;
+  const ua = navigator.userAgent || "";
+  const iOS = /iP(hone|ad|od)/.test(ua) || (/Macintosh/.test(ua) && "ontouchend" in document);
+  return !iOS;
+}
+
 export async function openCloseUpCamera(): Promise<MediaStream> {
-  const seed = await navigator.mediaDevices.getUserMedia({
-    audio: false,
-    video: {
-      facingMode: { ideal: "environment" },
-      width: { ideal: 1920 },
-      height: { ideal: 1080 },
-    },
-  });
+  if (!navigator.mediaDevices?.getUserMedia) {
+    throw new DOMException("Camera API is not available.", "NotSupportedError");
+  }
+
+  // Chrome Android only shows the permission prompt on a simple video request.
+  // High-res / exact-device constraints come after access is granted.
+  const permissionAttempts: Array<MediaTrackConstraints | true> = [
+    { facingMode: { ideal: "environment" } },
+    { facingMode: "environment" },
+    true,
+  ];
+
+  let seed: MediaStream | null = null;
+  let lastError: unknown;
+  for (const constraints of permissionAttempts) {
+    try {
+      seed = await requestVideo(constraints);
+      break;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  if (!seed) {
+    throw lastError instanceof Error ? lastError : new Error("Could not start the camera.");
+  }
 
   const devices = await navigator.mediaDevices.enumerateDevices();
   const cameras = devices.filter((device) => device.kind === "videoinput");
@@ -37,21 +70,16 @@ export async function openCloseUpCamera(): Promise<MediaStream> {
   const currentId = seed.getVideoTracks()[0]?.getSettings().deviceId;
 
   if (best?.deviceId && best.deviceId !== currentId && scoreRearCamera(best.label) >= 4) {
-    seed.getTracks().forEach((track) => track.stop());
     try {
-      return await navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: {
-          deviceId: { exact: best.deviceId },
-          width: { ideal: 1920 },
-          height: { ideal: 1080 },
-        },
+      const upgraded = await requestVideo({
+        deviceId: { exact: best.deviceId },
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
       });
+      stopTracks(seed);
+      return upgraded;
     } catch {
-      return navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: { facingMode: { ideal: "environment" } },
-      });
+      return seed;
     }
   }
 

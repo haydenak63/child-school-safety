@@ -58,15 +58,58 @@ model SchoolIntegration {
 }
 
 model Admin {
-  id                String   @id @default(cuid())
+  id                String    @id @default(cuid())
   schoolId          String
-  email             String   @unique
+  email             String    @unique
   passwordHash      String
   name              String
-  platformOperator  Boolean  @default(false)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  school            School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  platformOperator  Boolean   @default(false)
+  emailVerifiedAt   DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  school                      School                   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  emailVerificationTokens     EmailVerificationToken[]
+  passwordResetTokens         PasswordResetToken[]
+}
+
+model EmailVerificationToken {
+  id        String    @id @default(cuid())
+  adminId   String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  admin     Admin     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  adminId   String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  admin     Admin     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+}
+
+enum EmailLogStatus {
+  SENT
+  FAILED
+  SKIPPED
+}
+
+model EmailLog {
+  id        String         @id @default(cuid())
+  to        String
+  subject   String
+  template  String
+  status    EmailLogStatus
+  error     String?        @db.Text
+  createdAt DateTime       @default(now())
 }
 
 enum BillingPlan {

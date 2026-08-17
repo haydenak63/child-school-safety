@@ -228,7 +228,7 @@ export default function HomePage() {
               spreadsheet.
             </p>
           </div>
-          <Button href="/demo" className="bg-white text-brand hover:bg-white/90">
+          <Button href="/demo" variant="secondary" className="border-transparent bg-white !text-brand hover:bg-white/90">
             Book a demo
           </Button>
         </div>

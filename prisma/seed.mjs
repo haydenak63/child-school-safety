@@ -67,6 +67,7 @@ async function main() {
       passwordHash: await bcrypt.hash(password, 12),
       name: "School Admin",
       platformOperator: true,
+      emailVerifiedAt: new Date(),
     },
   });
 

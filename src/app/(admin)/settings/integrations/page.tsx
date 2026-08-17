@@ -4,6 +4,7 @@ import { getPlatformSettings, isPlatformOperator, toGatewayPublicView } from "@/
 import { IqPigeonIntegration } from "@/components/settings/iq-pigeon-integration";
 import { ExtraIntegrations } from "@/components/settings/extra-integrations";
 import { SmtpForm } from "@/components/settings/smtp-form";
+import { EmailTemplatesCard } from "@/components/settings/email-templates-card";
 
 export default async function IntegrationsPage() {
   const session = await requireAdminPage();
@@ -24,6 +25,7 @@ export default async function IntegrationsPage() {
       <IqPigeonIntegration integration={integration} />
       <ExtraIntegrations />
       {operator ? <SmtpForm settings={toGatewayPublicView(platform).smtp} /> : null}
+      <EmailTemplatesCard />
     </div>
   );
 }

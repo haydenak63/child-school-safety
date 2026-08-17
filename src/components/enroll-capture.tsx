@@ -66,9 +66,9 @@ export function EnrollCapture({
           <p className="text-xl font-semibold">{studentName}</p>
         </div>
         <ul className="rounded-2xl border border-line bg-surface px-4 py-4 text-sm leading-6 text-ink-soft">
+          <li>Tap the oval, then tap Allow when Chrome asks for the camera</li>
           <li>Use good lighting</li>
-          <li>Keep the finger steady</li>
-          <li>Fill the guide area</li>
+          <li>Keep the finger steady and fill the guide area</li>
           <li>Keep the finger clean and dry</li>
         </ul>
         <FingerprintCamera

@@ -4,7 +4,7 @@ import { requireSession } from "@/lib/auth/session";
 import { AppError, errorResponse } from "@/lib/errors";
 import { assertSameOrigin, readJson } from "@/lib/http";
 import { createSecureToken, encryptString, hashToken } from "@/lib/crypto";
-import { originFromRequest } from "@/lib/env";
+import { cameraPageOrigin } from "@/lib/env";
 import { terminalPublicView } from "@/lib/services/terminals";
 import { z } from "zod";
 
@@ -49,7 +49,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 
     const updated = await prisma.terminal.update({ where: { id }, data });
     return Response.json({
-      terminal: await terminalPublicView(updated, originFromRequest(request)),
+      terminal: await terminalPublicView(updated, cameraPageOrigin(request)),
     });
   } catch (error) {
     return errorResponse(error);

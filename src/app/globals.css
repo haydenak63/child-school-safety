@@ -78,6 +78,14 @@ a {
   color: inherit;
 }
 
+/* Navy interactive surfaces need light type. Toggle tracks are unlabelled
+   spans (not a/button), so they keep their existing colours. Skip .bg-white
+   so inverted CTAs on navy sections stay dark-on-light. */
+a.bg-brand:not(.bg-white),
+button.bg-brand:not(.bg-white) {
+  color: #fff;
+}
+
 button,
 input,
 select,

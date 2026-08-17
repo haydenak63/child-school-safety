@@ -13,6 +13,7 @@ export default function sitemap() {
     "/privacy",
     "/terms",
     "/login",
+    "/register",
   ];
   return paths.map((path) => ({
     url: `${site.url}${path || "/"}`,

@@ -4,13 +4,13 @@ import { requireSession } from "@/lib/auth/session";
 import { errorResponse } from "@/lib/errors";
 import { assertSameOrigin, readJson } from "@/lib/http";
 import { parseBody, terminalSchema } from "@/lib/validation";
-import { originFromRequest } from "@/lib/env";
+import { cameraPageOrigin } from "@/lib/env";
 import { createTerminalRecord, terminalPublicView } from "@/lib/services/terminals";
 
 export async function GET(request: NextRequest) {
   try {
     const session = await requireSession();
-    const origin = originFromRequest(request);
+    const origin = cameraPageOrigin(request);
     const terminals = await prisma.terminal.findMany({
       where: { schoolId: session.schoolId },
       orderBy: { createdAt: "asc" },
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await requireSession();
     assertSameOrigin(request);
-    const origin = originFromRequest(request);
+    const origin = cameraPageOrigin(request);
     const body = parseBody(terminalSchema, await readJson(request));
     const created = await createTerminalRecord({
       schoolId: session.schoolId,

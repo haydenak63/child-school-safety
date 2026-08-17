@@ -39,7 +39,7 @@ export function MarketingHeader() {
           <Button href="/login" variant="ghost">
             Sign in
           </Button>
-          <Button href="/demo">Book a demo</Button>
+          <Button href="/register">Create account</Button>
         </div>
         <button
           type="button"
@@ -68,7 +68,10 @@ export function MarketingHeader() {
             <Button href="/login" variant="secondary">
               Sign in
             </Button>
-            <Button href="/demo">Book a demo</Button>
+            <Button href="/register">Create account</Button>
+            <Button href="/demo" variant="ghost">
+              Book a demo
+            </Button>
           </div>
         </div>
       ) : null}

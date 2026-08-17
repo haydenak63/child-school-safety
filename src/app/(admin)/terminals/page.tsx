@@ -6,7 +6,7 @@ import { terminalPublicView } from "@/lib/services/terminals";
 import { CreateTerminalForm } from "@/components/create-terminal-form";
 import { TerminalCard } from "@/components/terminals/terminal-card";
 import { formatTime } from "@/lib/dates";
-import { getAppUrl } from "@/lib/env";
+import { firstHeaderValue, getAppUrl } from "@/lib/env";
 import { Card, PageHeader } from "@/components/ui/primitives";
 
 function lanUrls(port: string): string[] {
@@ -24,9 +24,12 @@ function lanUrls(port: string): string[] {
 export default async function TerminalsPage() {
   const session = await requireAdminPage();
   const headerStore = await headers();
-  const host = headerStore.get("x-forwarded-host") ?? headerStore.get("host") ?? "localhost:3000";
-  const proto = headerStore.get("x-forwarded-proto") ?? "https";
-  const origin = `${proto}://${host.split(",")[0].trim()}`;
+  const host =
+    firstHeaderValue(headerStore.get("x-forwarded-host")) ||
+    firstHeaderValue(headerStore.get("host")) ||
+    "localhost:3000";
+  const proto = firstHeaderValue(headerStore.get("x-forwarded-proto")) || "https";
+  const origin = `${proto}://${host}`;
   const port = host.split(":")[1] || "3000";
   const phoneUrls = lanUrls(port);
   const school = await prisma.school.findUniqueOrThrow({ where: { id: session.schoolId } });

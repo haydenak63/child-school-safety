@@ -77,6 +77,46 @@ export const platformBillingSchema = z.object({
   jazzcashIntegrity: z.string().trim().max(400).optional().or(z.literal("")),
 });
 
+export const registerSchema = z
+  .object({
+    schoolName: z.string().trim().min(1, "Enter the school name.").max(160),
+    ownerName: z.string().trim().min(1, "Enter your name.").max(120),
+    email: z.string().trim().email("Enter a valid email.").max(160),
+    password: z.string().min(8, "Password must be at least 8 characters.").max(200),
+    confirmPassword: z.string().min(1, "Confirm your password.").max(200),
+    timezone: z.string().trim().min(1).max(80).optional(),
+    address: z.string().trim().max(240).optional(),
+  })
+  .refine((value) => value.password === value.confirmPassword, {
+    message: "Passwords do not match.",
+    path: ["confirmPassword"],
+  });
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().trim().email("Enter a valid email.").max(160),
+});
+
+export const resetPasswordSchema = z
+  .object({
+    token: z.string().trim().min(1, "Reset token is missing."),
+    password: z.string().min(8, "Password must be at least 8 characters.").max(200),
+    confirmPassword: z.string().min(1, "Confirm your password.").max(200),
+  })
+  .refine((value) => value.password === value.confirmPassword, {
+    message: "Passwords do not match.",
+    path: ["confirmPassword"],
+  });
+
+export const resendVerificationSchema = z.object({
+  email: z.string().trim().email("Enter a valid email.").max(160),
+});
+
+export const smtpTestSchema = z.object({
+  to: z
+    .union([z.string().trim().email("Enter a valid email.").max(160), z.literal("")])
+    .optional(),
+});
+
 export const smtpSettingsSchema = z.object({
   smtpEnabled: z.boolean(),
   smtpHost: z.string().trim().max(200).optional().or(z.literal("")),

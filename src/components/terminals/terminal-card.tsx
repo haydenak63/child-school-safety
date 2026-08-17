@@ -49,7 +49,12 @@ export function TerminalCard({ terminal }: { terminal: TerminalView }) {
       </div>
       <p className="mt-4 text-sm text-ink-muted">Last activity {terminal.lastActivityLabel}</p>
       {showQr && terminal.qrDataUrl ? (
-        <img src={terminal.qrDataUrl} alt={`${terminal.name} QR`} className="mx-auto mt-4 h-44 w-44" />
+        <a
+          href={terminal.url ?? undefined}
+          className="mx-auto mt-4 block w-fit rounded-2xl focus-visible:ring-2 focus-visible:ring-brand/40"
+        >
+          <img src={terminal.qrDataUrl} alt={`Open ${terminal.name} fingerprint camera`} className="h-44 w-44" />
+        </a>
       ) : null}
       {terminal.url ? <p className="mt-3 break-all text-xs text-ink-muted">{terminal.url}</p> : null}
       <div className="mt-5 grid gap-2 sm:grid-cols-2">

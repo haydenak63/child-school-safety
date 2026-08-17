@@ -125,13 +125,11 @@ Detailed copy: [docs/manual-testing.md](docs/manual-testing.md).
 
 ## Deployment
 
-1. Provision PostgreSQL.
-2. Set production env vars, including a strong `AUTH_SECRET` (32+ characters) and `NEXT_PUBLIC_APP_URL` as the public HTTPS origin.
-3. `npx prisma migrate deploy && npx prisma db seed` (or skip seed in production).
-4. `npm run build && npm start`, or deploy to a Node host (Railway, Render, Fly, a VPS).
-5. Serve over HTTPS so mobile cameras work.
+Live Halo is on cPanel (`~/halo`, https://css.iqpigeon.com). **Do not run `next build` on the server** (CloudLinux 8 cannot load Next’s SWC binary).
 
-Vercel can host the Next.js app if the database is reachable. `sharp` is used on the server for image decode.
+Each time you change this project and want the live site updated, follow **[docs/update-push-pull.md](docs/update-push-pull.md)**: commit and `git push` from Windows, build `next-build.tar.gz` here, `git pull` on the server, `npx prisma migrate deploy` if the schema changed, `bash scripts/deploy-build.sh`, then restart the Node app.
+
+Production env must include a strong `AUTH_SECRET` (32+ characters) and `NEXT_PUBLIC_APP_URL=https://css.iqpigeon.com`. Skip `prisma db seed` on production unless you want demo data. Serve over HTTPS so phone cameras work.
 
 ## API
 

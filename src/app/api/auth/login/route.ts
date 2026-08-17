@@ -74,6 +74,19 @@ export async function POST(request: NextRequest) {
       throw new AppError("UNAUTHORIZED", "Invalid email or password.", 401);
     }
 
+    if (!admin.emailVerifiedAt) {
+      if (credentials.isForm) {
+        const params = new URLSearchParams({
+          error: "Verify your email before signing in.",
+          unverified: "1",
+          email: admin.email,
+          next: credentials.next,
+        });
+        return redirectTo(request, `/login?${params.toString()}`);
+      }
+      throw new AppError("EMAIL_UNVERIFIED", "Verify your email before signing in.", 403);
+    }
+
     const response = credentials.isForm
       ? redirectTo(request, credentials.next)
       : NextResponse.json({ ok: true });

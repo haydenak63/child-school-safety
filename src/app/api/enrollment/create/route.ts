@@ -4,7 +4,7 @@ import { requireSession } from "@/lib/auth/session";
 import { AppError, errorResponse } from "@/lib/errors";
 import { assertSameOrigin, readJson } from "@/lib/http";
 import { createSecureToken, hashToken } from "@/lib/crypto";
-import { originFromRequest } from "@/lib/env";
+import { cameraPageOrigin } from "@/lib/env";
 import { qrDataUrl } from "@/lib/qr";
 import { ENROLLMENT_TTL_MS } from "@/lib/services/enrollment";
 import { z } from "zod";
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    const url = `${originFromRequest(request)}/enroll/${token}`;
+    const url = `${cameraPageOrigin(request)}/enroll/${token}`;
     return Response.json({
       url,
       expiresAt: expiresAt.toISOString(),

@@ -20,9 +20,22 @@ function lanDevOrigins() {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   allowedDevOrigins: lanDevOrigins(),
-  serverExternalPackages: ["sharp", "@prisma/client", "prisma"],
+  serverExternalPackages: ["sharp", "@prisma/client", "prisma", "nodemailer"],
   turbopack: {
     root: __dirname,
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Permissions-Policy",
+            value: "camera=(self), microphone=(), geolocation=()",
+          },
+        ],
+      },
+    ];
   },
 };
 

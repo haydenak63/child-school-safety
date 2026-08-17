@@ -23,6 +23,7 @@ const columns = [
     title: "Resources",
     links: [
       { href: "/login", label: "Sign in" },
+      { href: "/register", label: "Create account" },
       { href: "/dashboard", label: "Dashboard" },
     ],
   },
