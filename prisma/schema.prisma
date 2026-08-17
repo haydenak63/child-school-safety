@@ -1,0 +1,176 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model School {
+  id                  String   @id @default(cuid())
+  name                String
+  address             String
+  timezone            String   @default("Asia/Karachi")
+  scanCooldownSeconds Int      @default(10)
+  matchThreshold      Float    @default(0.58)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  admins    Admin[]
+  students  Student[]
+  parents   Parent[]
+  terminals Terminal[]
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  schoolId     String
+  email        String   @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  school       School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+}
+
+enum StudentStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Student {
+  id            String        @id @default(cuid())
+  schoolId      String
+  studentNumber String
+  firstName     String
+  lastName      String
+  photo         String?
+  className     String
+  section       String
+  status        StudentStatus @default(ACTIVE)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  school        School                 @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  parents       StudentParent[]
+  fingerprints  FingerprintTemplate[]
+  attendance    AttendanceEvent[]
+  notifications NotificationLog[]
+  enrollments   EnrollmentSession[]
+
+  @@unique([schoolId, studentNumber])
+}
+
+model Parent {
+  id             String   @id @default(cuid())
+  schoolId       String
+  name           String
+  relationship   String
+  whatsappNumber String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  school   School          @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  students StudentParent[]
+}
+
+model StudentParent {
+  studentId String
+  parentId  String
+  isPrimary Boolean @default(false)
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  parent  Parent  @relation(fields: [parentId], references: [id], onDelete: Cascade)
+
+  @@id([studentId, parentId])
+}
+
+model FingerprintTemplate {
+  id           String   @id @default(cuid())
+  studentId    String
+  templateData String   @db.Text
+  finger       String   @default("UNKNOWN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+enum TerminalStatus {
+  ACTIVE
+  REVOKED
+}
+
+model Terminal {
+  id             String         @id @default(cuid())
+  schoolId       String
+  name           String
+  location       String
+  tokenHash      String         @unique
+  tokenEncrypted String         @db.Text
+  status         TerminalStatus @default(ACTIVE)
+  lastActivityAt DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  school     School            @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  attendance AttendanceEvent[]
+}
+
+enum AttendanceEventType {
+  ARRIVAL
+  DEPARTURE
+}
+
+model AttendanceEvent {
+  id         String               @id @default(cuid())
+  studentId  String
+  terminalId String
+  eventType  AttendanceEventType
+  confidence Float
+  timestamp  DateTime             @default(now())
+  createdAt  DateTime             @default(now())
+
+  student       Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  terminal      Terminal          @relation(fields: [terminalId], references: [id], onDelete: Cascade)
+  notifications NotificationLog[]
+
+  @@index([studentId, timestamp])
+  @@index([timestamp])
+}
+
+enum NotificationChannel {
+  WHATSAPP
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  MOCKED
+}
+
+model NotificationLog {
+  id                String              @id @default(cuid())
+  studentId         String
+  attendanceEventId String
+  channel           NotificationChannel @default(WHATSAPP)
+  recipient         String
+  message           String              @db.Text
+  status            NotificationStatus
+  sentAt            DateTime?
+  createdAt         DateTime            @default(now())
+
+  student         Student         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  attendanceEvent AttendanceEvent @relation(fields: [attendanceEventId], references: [id], onDelete: Cascade)
+}
+
+model EnrollmentSession {
+  id        String    @id @default(cuid())
+  studentId String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  student   Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
