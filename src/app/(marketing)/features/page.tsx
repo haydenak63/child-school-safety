@@ -49,7 +49,7 @@ export default function FeaturesPage() {
         <p className="eyebrow">Platform</p>
         <h1 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight">Everything the school gate needs.</h1>
         <p className="mt-4 max-w-2xl text-sm leading-6 text-ink-muted">
-          Halo covers enrollment, identification, attendance, and parent notification — without
+          CSS covers enrollment, identification, attendance, and parent notification — without
           turning operations into a maze of screens.
         </p>
       </Reveal>

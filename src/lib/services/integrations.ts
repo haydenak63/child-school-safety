@@ -174,12 +174,12 @@ export async function testSchoolIntegration(options: {
         event_type: "ARRIVAL",
         occurred_at: now.toISOString(),
         school: { name: school.name, timezone: school.timezone },
-        student: { name: "Halo Connection Test", reference: TEST_STUDENT_REFERENCE },
+        student: { name: "CSS Connection Test", reference: TEST_STUDENT_REFERENCE },
         gate: "Connection test",
         local_time: formatTimeShort(now, school.timezone),
         recipients: [
           {
-            name: "Halo Connection Test",
+            name: "CSS Connection Test",
             phone: options.testRecipient?.trim() || TEST_RECIPIENT_FALLBACK,
           },
         ],

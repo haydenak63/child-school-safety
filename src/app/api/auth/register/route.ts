@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { hashPassword } from "@/lib/auth/password";
 import { issueEmailVerification } from "@/lib/auth/email-tokens";
-import { authRedirect, readAuthPayload, withQuery } from "@/lib/auth/request";
+import { authFormRedirect, authRedirect, readAuthPayload, withQuery } from "@/lib/auth/request";
 import { AppError, errorResponse } from "@/lib/errors";
 import { prisma } from "@/lib/prisma";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
@@ -79,6 +79,9 @@ export async function POST(request: NextRequest) {
       mail: mail.mailStatus,
     });
   } catch (error) {
-    return errorResponse(error);
+    if (request.headers.get("content-type")?.includes("application/json")) {
+      return errorResponse(error);
+    }
+    return authFormRedirect(request, "/register", error);
   }
 }

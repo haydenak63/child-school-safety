@@ -3,7 +3,7 @@ import { ContactForm } from "@/components/marketing/contact-form";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Talk with Halo about school attendance and child-safety operations.",
+  description: "Talk with CSS about school attendance and child-safety operations.",
   alternates: { canonical: "/contact" },
 };
 

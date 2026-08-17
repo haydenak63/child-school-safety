@@ -16,76 +16,100 @@ export async function issueEmailVerification(admin: {
   school: { name: string };
 }) {
   const now = new Date();
-  await prisma.emailVerificationToken.updateMany({
-    where: { adminId: admin.id, usedAt: null },
-    data: { usedAt: now },
-  });
-  const token = createSecureToken();
-  await prisma.emailVerificationToken.create({
-    data: {
-      adminId: admin.id,
-      tokenHash: hashToken(token),
-      expiresAt: new Date(now.getTime() + VERIFY_EMAIL_TTL_MS),
-    },
-  });
-  const rendered = renderVerifyEmail({
-    appUrl: getAppUrl(),
-    token,
-    schoolName: admin.school.name,
-    ownerName: admin.name,
-  });
-  const mail = await sendTransactionalEmail({
-    to: admin.email,
-    subject: rendered.subject,
-    html: rendered.html,
-    text: rendered.text,
-    template: "verify-email",
-  });
-  return { token, mailStatus: mail.status };
+  try {
+    await prisma.emailVerificationToken.updateMany({
+      where: { adminId: admin.id, usedAt: null },
+      data: { usedAt: now },
+    });
+    const token = createSecureToken();
+    await prisma.emailVerificationToken.create({
+      data: {
+        adminId: admin.id,
+        tokenHash: hashToken(token),
+        expiresAt: new Date(now.getTime() + VERIFY_EMAIL_TTL_MS),
+      },
+    });
+    const rendered = renderVerifyEmail({
+      appUrl: getAppUrl(),
+      token,
+      schoolName: admin.school.name,
+      ownerName: admin.name,
+    });
+    const mail = await sendTransactionalEmail({
+      to: admin.email,
+      subject: rendered.subject,
+      html: rendered.html,
+      text: rendered.text,
+      template: "verify-email",
+    });
+    return { token, mailStatus: mail.status };
+  } catch (error) {
+    const code = typeof error === "object" && error && "code" in error ? String((error as { code: unknown }).code) : "";
+    if (code === "P2021" || code === "P2022") {
+      throw new AppError(
+        "SERVER",
+        "Email verification is not available yet. Ask the operator to run database migrations.",
+        503,
+      );
+    }
+    throw error;
+  }
 }
 
 export async function consumeEmailVerification(plainToken: string): Promise<{
   state: "ok" | "invalid" | "expired" | "used";
   alreadyVerified: boolean;
 }> {
-  const row = await prisma.emailVerificationToken.findUnique({
-    where: { tokenHash: hashToken(plainToken) },
-    include: { admin: { include: { school: true } } },
-  });
-  if (!row) return { state: "invalid", alreadyVerified: false };
-
-  const state = evaluateAuthToken(row);
-  if (state !== "ok") return { state, alreadyVerified: Boolean(row.admin.emailVerifiedAt) };
-
-  const alreadyVerified = Boolean(row.admin.emailVerifiedAt);
-  const verifiedAt = row.admin.emailVerifiedAt ?? new Date();
-  await prisma.$transaction([
-    prisma.emailVerificationToken.update({
-      where: { id: row.id },
-      data: { usedAt: new Date() },
-    }),
-    prisma.admin.update({
-      where: { id: row.adminId },
-      data: { emailVerifiedAt: verifiedAt },
-    }),
-  ]);
-
-  if (!alreadyVerified) {
-    const welcome = renderWelcome({
-      appUrl: getAppUrl(),
-      schoolName: row.admin.school.name,
-      ownerName: row.admin.name,
+  try {
+    const row = await prisma.emailVerificationToken.findUnique({
+      where: { tokenHash: hashToken(plainToken) },
+      include: { admin: { include: { school: true } } },
     });
-    await sendTransactionalEmail({
-      to: row.admin.email,
-      subject: welcome.subject,
-      html: welcome.html,
-      text: welcome.text,
-      template: "welcome",
-    });
+    if (!row) return { state: "invalid", alreadyVerified: false };
+
+    const state = evaluateAuthToken(row);
+    if (state !== "ok") return { state, alreadyVerified: Boolean(row.admin.emailVerifiedAt) };
+
+    const alreadyVerified = Boolean(row.admin.emailVerifiedAt);
+    const verifiedAt = row.admin.emailVerifiedAt ?? new Date();
+    await prisma.$transaction([
+      prisma.emailVerificationToken.update({
+        where: { id: row.id },
+        data: { usedAt: new Date() },
+      }),
+      prisma.admin.update({
+        where: { id: row.adminId },
+        data: { emailVerifiedAt: verifiedAt },
+      }),
+    ]);
+
+    if (!alreadyVerified) {
+      const welcome = renderWelcome({
+        appUrl: getAppUrl(),
+        schoolName: row.admin.school.name,
+        ownerName: row.admin.name,
+      });
+      await sendTransactionalEmail({
+        to: row.admin.email,
+        subject: welcome.subject,
+        html: welcome.html,
+        text: welcome.text,
+        template: "welcome",
+      });
+    }
+
+    return { state: "ok", alreadyVerified };
+  } catch (error) {
+    const code = typeof error === "object" && error && "code" in error ? String((error as { code: unknown }).code) : "";
+    if (code === "P2021" || code === "P2022") {
+      throw new AppError(
+        "SERVER",
+        "Email verification is not available yet. Ask the operator to run database migrations.",
+        503,
+      );
+    }
+    throw error;
   }
-
-  return { state: "ok", alreadyVerified };
 }
 
 export async function issuePasswordReset(admin: {

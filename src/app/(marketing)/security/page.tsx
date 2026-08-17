@@ -3,7 +3,7 @@ import { Reveal } from "@/components/marketing/reveal";
 
 export const metadata: Metadata = {
   title: "Security",
-  description: "How Halo protects enrollment sessions, terminals, and biometric templates.",
+  description: "How CSS protects enrollment sessions, terminals, and biometric templates.",
   alternates: { canonical: "/security" },
 };
 
@@ -45,7 +45,7 @@ export default function SecurityPage() {
         <p className="eyebrow">Security</p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight">Built around trust.</h1>
         <p className="mt-4 max-w-2xl text-sm leading-6 text-ink-muted">
-          Halo is designed with controlled access, short-lived enrollment, and biometric templates
+          CSS is designed with controlled access, short-lived enrollment, and biometric templates
           that never leave protected storage.
         </p>
       </Reveal>

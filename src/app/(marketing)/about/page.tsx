@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Halo is a school attendance and child-safety platform for arrivals and departures.",
+  description: "CSS is a school attendance and child-safety platform for arrivals and departures.",
   alternates: { canonical: "/about" },
 };
 
@@ -13,7 +13,7 @@ export default function AboutPage() {
       <h1 className="mt-3 text-4xl font-semibold tracking-tight">A quieter way to run the school gate.</h1>
       <div className="mt-8 space-y-5 text-sm leading-7 text-ink-soft">
         <p>
-          Halo helps schools know when students arrive and leave, then keep parents informed. It is
+          CSS helps schools know when students arrive and leave, then keep parents informed. It is
           built for operators who need a serious product, not a cluttered administration template.
         </p>
         <p>

@@ -5,7 +5,7 @@ import { fieldClass } from "@/components/ui/primitives";
 
 export const metadata: Metadata = {
   title: "Create a school account",
-  description: "Register your school on Halo to record arrivals, departures, and parent notifications.",
+  description: "Register your school on CSS to record arrivals, departures, and parent notifications.",
 };
 
 export default async function RegisterPage({

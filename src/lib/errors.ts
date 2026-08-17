@@ -49,3 +49,12 @@ export function errorResponse(error: unknown): Response {
     { status: 500 },
   );
 }
+
+export function publicErrorMessage(error: unknown, fallback = "Something went wrong. Please try again."): string {
+  if (error instanceof AppError) return error.message;
+  const code = typeof error === "object" && error && "code" in error ? String((error as { code: unknown }).code) : "";
+  if (code === "P2021" || code === "P2022") {
+    return "This feature is not ready on the server yet. Ask the operator to run database migrations.";
+  }
+  return fallback;
+}

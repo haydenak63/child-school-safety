@@ -1,3 +1,5 @@
+import { site } from "@/lib/site";
+
 const BRAND = "#1e3a5f";
 const CANVAS = "#f6f4f0";
 const INK = "#14161c";
@@ -44,17 +46,17 @@ export function renderVerifyEmail(input: {
 }): RenderedEmail {
   const url = `${input.appUrl}/verify-email/${input.token}`;
   return wrapEmail({
-    subject: `Verify your Halo account for ${input.schoolName}`,
+    subject: `Verify your ${site.name} account for ${input.schoolName}`,
     preview: "Confirm your email to activate your school account.",
     heading: "Verify your email",
-    intro: `Hi ${input.ownerName}, welcome to Halo. Confirm this email to activate ${input.schoolName}.`,
+    intro: `Hi ${input.ownerName}, welcome to ${site.name}. Confirm this email to activate ${input.schoolName}.`,
     body: "This link expires in 48 hours. If you did not create this account, you can ignore this message.",
     actionLabel: "Verify email",
     actionUrl: url,
     text: [
       `Hi ${input.ownerName},`,
       "",
-      `Confirm this email to activate ${input.schoolName} on Halo.`,
+      `Confirm this email to activate ${input.schoolName} on ${site.name}.`,
       url,
       "",
       "This link expires in 48 hours.",
@@ -70,17 +72,17 @@ export function renderResetPassword(input: {
 }): RenderedEmail {
   const url = `${input.appUrl}/reset-password/${input.token}`;
   return wrapEmail({
-    subject: `Reset your Halo password for ${input.schoolName}`,
+    subject: `Reset your ${site.name} password for ${input.schoolName}`,
     preview: "Use this link within one hour to choose a new password.",
     heading: "Reset your password",
-    intro: `Hi ${input.ownerName}, we received a request to reset the Halo password for ${input.schoolName}.`,
+    intro: `Hi ${input.ownerName}, we received a request to reset the ${site.name} password for ${input.schoolName}.`,
     body: "This link expires in one hour and can be used only once. If you did not ask for a reset, you can ignore this message.",
     actionLabel: "Choose a new password",
     actionUrl: url,
     text: [
       `Hi ${input.ownerName},`,
       "",
-      `Reset the Halo password for ${input.schoolName}:`,
+      `Reset the ${site.name} password for ${input.schoolName}:`,
       url,
       "",
       "This link expires in one hour.",
@@ -95,17 +97,17 @@ export function renderWelcome(input: {
 }): RenderedEmail {
   const url = `${input.appUrl}/login`;
   return wrapEmail({
-    subject: `Welcome to Halo, ${input.schoolName}`,
+    subject: `Welcome to ${site.name}, ${input.schoolName}`,
     preview: "Your school account is ready. Sign in to start recording attendance.",
     heading: "You are verified",
-    intro: `Hi ${input.ownerName}, ${input.schoolName} is ready on Halo.`,
+    intro: `Hi ${input.ownerName}, ${input.schoolName} is ready on ${site.name}.`,
     body: "Sign in to add students, enroll fingerprints, and set up gate terminals.",
-    actionLabel: "Sign in to Halo",
+    actionLabel: `Sign in to ${site.name}`,
     actionUrl: url,
     text: [
       `Hi ${input.ownerName},`,
       "",
-      `${input.schoolName} is ready on Halo. Sign in:`,
+      `${input.schoolName} is ready on ${site.name}. Sign in:`,
       url,
     ].join("\n"),
   });
@@ -131,7 +133,7 @@ function wrapEmail(input: {
           <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:${SURFACE};border-radius:20px;overflow:hidden;">
             <tr>
               <td style="background:${BRAND};padding:24px 32px;color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:700;letter-spacing:-0.02em;">
-                Halo
+                ${escapeHtml(site.name)}
               </td>
             </tr>
             <tr>

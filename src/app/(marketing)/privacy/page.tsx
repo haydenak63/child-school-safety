@@ -3,7 +3,7 @@ import { LegalNav } from "@/components/marketing/legal-nav";
 
 export const metadata: Metadata = {
   title: "Privacy",
-  description: "How Halo handles school, student, and biometric data.",
+  description: "How CSS handles school, student, and biometric data.",
   alternates: { canonical: "/privacy" },
 };
 
@@ -23,12 +23,12 @@ export default function PrivacyPage() {
         <div>
           <p className="eyebrow">Legal</p>
           <h1 className="mt-3 text-4xl font-semibold tracking-tight text-ink">Privacy policy</h1>
-          <p className="mt-3">This document describes how Halo handles the data schools entrust to it.</p>
+          <p className="mt-3">This document describes how CSS handles the data schools entrust to it.</p>
         </div>
         <section id="scope">
           <h2 className="text-xl font-semibold text-ink">Scope</h2>
           <p className="mt-3">
-            Halo is a school attendance platform. It processes administrator accounts, student and
+            CSS is a school attendance platform. It processes administrator accounts, student and
             parent records, attendance events, and camera-captured fingerprint images used to create
             protected templates.
           </p>

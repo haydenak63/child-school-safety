@@ -27,32 +27,27 @@ const columns = [
       { href: "/dashboard", label: "Dashboard" },
     ],
   },
-  {
-    title: "Legal",
-    links: [
-      { href: "/privacy", label: "Privacy" },
-      { href: "/terms", label: "Terms" },
-    ],
-  },
 ];
 
 export function MarketingFooter() {
   return (
-    <footer className="border-t border-line bg-surface">
-      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-8 px-4 py-12 sm:px-6 md:grid-cols-5 md:gap-10 md:py-14">
+    <footer className="border-t border-line pt-16 pb-10">
+      <div className="mx-auto grid max-w-[1180px] grid-cols-2 gap-10 px-5 sm:px-8 md:grid-cols-4">
         <div className="col-span-2 md:col-span-1">
           <Logo />
-          <p className="mt-4 max-w-xs text-sm leading-6 text-ink-muted">
+          <p className="mt-4 max-w-[240px] text-[13px] leading-7 text-ink-muted">
             Know when students arrive. Know when they leave. Keep parents informed.
           </p>
         </div>
         {columns.map((column) => (
           <div key={column.title}>
-            <p className="eyebrow">{column.title}</p>
-            <ul className="mt-3 space-y-2 md:mt-4">
+            <p className="font-[family-name:var(--font-plex)] text-[11px] font-medium tracking-[0.1em] text-ink-muted uppercase">
+              {column.title}
+            </p>
+            <ul className="mt-4 space-y-3">
               {column.links.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="inline-flex min-h-11 items-center text-sm text-ink-soft hover:text-ink">
+                  <Link href={link.href} className="text-[13.5px] text-ink-muted hover:text-[#4b2fcb]">
                     {link.label}
                   </Link>
                 </li>
@@ -61,11 +56,9 @@ export function MarketingFooter() {
           </div>
         ))}
       </div>
-      <div className="border-t border-line">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-5 text-xs text-ink-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <p>© {new Date().getFullYear()} Halo. School attendance and child safety.</p>
-          <p>Every arrival. Every departure. Accounted for.</p>
-        </div>
+      <div className="mx-auto mt-12 flex max-w-[1180px] flex-col gap-2 border-t border-line px-5 pt-6 text-xs text-ink-muted sm:flex-row sm:items-center sm:justify-between sm:px-8">
+        <p>© {new Date().getFullYear()} CSS. School attendance and child safety.</p>
+        <p>Camera fingerprint matching is a practical school gate matcher, not a production AFIS.</p>
       </div>
     </footer>
   );

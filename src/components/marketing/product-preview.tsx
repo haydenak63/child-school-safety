@@ -5,7 +5,7 @@ export function ProductPreview() {
         <span className="h-2.5 w-2.5 rounded-full bg-line-strong" />
         <span className="h-2.5 w-2.5 rounded-full bg-line-strong" />
         <span className="h-2.5 w-2.5 rounded-full bg-line-strong" />
-        <p className="ml-2 truncate text-xs text-ink-muted">halo.app / dashboard</p>
+        <p className="ml-2 truncate text-xs text-ink-muted">css.iqpigeon.com / dashboard</p>
       </div>
       <div className="grid gap-4 p-4 sm:p-6 lg:grid-cols-4">
         {[

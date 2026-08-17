@@ -11,7 +11,7 @@ export default function NotFound() {
         The link may be expired, revoked, or typed incorrectly.
       </p>
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-        <Button href="/">Back to Halo</Button>
+        <Button href="/">Back to CSS</Button>
         <Button href="/login" variant="secondary">
           Sign in
         </Button>

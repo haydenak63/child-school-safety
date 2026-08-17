@@ -5,11 +5,11 @@ import { useState } from "react";
 const faqs = [
   {
     q: "How does attendance work?",
-    a: "A student is identified at a school terminal. Halo records an arrival or departure and stores the event with the terminal, time, and match confidence.",
+    a: "A student is identified at a school terminal. CSS records an arrival or departure and stores the event with the terminal, time, and match confidence.",
   },
   {
     q: "How does enrollment work?",
-    a: "An administrator generates a one-time QR link. A phone opens the enrollment page, captures a fingerprint image, and Halo creates a protected template.",
+    a: "An administrator generates a one-time QR link. A phone opens the enrollment page, captures a fingerprint image, and CSS creates a protected template.",
   },
   {
     q: "How are terminals used?",
@@ -17,7 +17,7 @@ const faqs = [
   },
   {
     q: "How do parent notifications work?",
-    a: "When attendance is recorded, Halo sends the parent a WhatsApp message and keeps a record of it in the dashboard.",
+    a: "When attendance is recorded, CSS sends the parent a WhatsApp message and keeps a record of it in the dashboard.",
   },
   {
     q: "Can dedicated hardware be used later?",

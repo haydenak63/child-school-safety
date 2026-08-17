@@ -22,9 +22,9 @@ export async function POST(request: NextRequest) {
     const to = body.to?.trim() || session.email;
     const result = await sendTransactionalEmail({
       to,
-      subject: "Halo SMTP test",
-      html: "<p>If you received this, outbound email from Halo is working.</p>",
-      text: "If you received this, outbound email from Halo is working.",
+      subject: "CSS SMTP test",
+      html: "<p>If you received this, outbound email from CSS is working.</p>",
+      text: "If you received this, outbound email from CSS is working.",
       template: "smtp-test",
     });
 

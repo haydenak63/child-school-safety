@@ -5,7 +5,7 @@ import { fieldClass } from "@/components/ui/primitives";
 
 export const metadata: Metadata = {
   title: "Forgot password",
-  description: "Request a Halo password reset link.",
+  description: "Request a CSS password reset link.",
   robots: { index: false, follow: false },
 };
 

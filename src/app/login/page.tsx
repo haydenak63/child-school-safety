@@ -5,7 +5,7 @@ import { fieldClass } from "@/components/ui/primitives";
 
 export const metadata: Metadata = {
   title: "Sign in",
-  description: "Sign in to the Halo school attendance portal.",
+  description: "Sign in to the CSS school attendance portal.",
   robots: { index: false, follow: false },
 };
 
@@ -38,7 +38,7 @@ export default async function LoginPage({
     <AuthFrame>
       <form method="post" action="/api/auth/login">
         <p className="eyebrow mt-4 lg:mt-0">Admin access</p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight">Sign in to Halo</h2>
+        <h2 className="mt-2 text-2xl font-semibold tracking-tight">Sign in to CSS</h2>
         <p className="mt-2 text-sm text-ink-muted">Use your school administrator account.</p>
         <input type="hidden" name="next" value={next} />
         <label className="mt-8 block text-sm font-medium text-ink-soft">

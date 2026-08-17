@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { originFromRequest } from "@/lib/env";
+import { publicErrorMessage } from "@/lib/errors";
 import { readJson } from "@/lib/http";
 
 export async function readAuthPayload(request: NextRequest): Promise<{
@@ -30,4 +31,16 @@ export function withQuery(path: string, params: Record<string, string | undefine
     if (value) url.searchParams.set(key, value);
   }
   return `${url.pathname}${url.search}`;
+}
+
+export function authFormRedirect(
+  request: NextRequest,
+  path: string,
+  error: unknown,
+  extra: Record<string, string | undefined> = {},
+) {
+  return authRedirect(
+    request,
+    withQuery(path, { ...extra, error: publicErrorMessage(error) }),
+  );
 }

@@ -53,7 +53,7 @@ export default async function CheckEmailPage({
   const copy = copyFor(params.reason, params.mail);
 
   return (
-    <AuthFrame panelBody="Open the message from Halo to continue.">
+    <AuthFrame panelBody="Open the message from CSS to continue.">
       <p className="eyebrow mt-4 lg:mt-0">Email sent</p>
       <h2 className="mt-2 text-2xl font-semibold tracking-tight">{copy.title}</h2>
       <p className="mt-2 text-sm leading-6 text-ink-muted">{copy.body}</p>

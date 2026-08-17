@@ -171,7 +171,7 @@ export function IqPigeonIntegration({ integration }: { integration: IntegrationV
           <span className="min-w-0">
             <span className="block text-sm font-medium text-ink">Send gate events to IQ Pigeon</span>
             <span className="block text-[11px] text-ink-muted">
-              {enabled ? "Parents are notified through IQ Pigeon." : "Gate events stay in Halo."}
+              {enabled ? "Parents are notified through IQ Pigeon." : "Gate events stay in CSS."}
             </span>
           </span>
           <span

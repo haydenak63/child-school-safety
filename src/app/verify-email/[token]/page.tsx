@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { AuthFrame } from "@/components/auth/auth-frame";
 import { consumeEmailVerification } from "@/lib/auth/email-tokens";
+import { AppError } from "@/lib/errors";
 
 export const metadata: Metadata = {
   title: "Verify email",
@@ -16,7 +17,28 @@ export default async function VerifyEmailPage({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
-  const result = await consumeEmailVerification(token);
+  let result: { state: "ok" | "invalid" | "expired" | "used"; alreadyVerified: boolean };
+  try {
+    result = await consumeEmailVerification(token);
+  } catch (error) {
+    const message =
+      error instanceof AppError
+        ? error.message
+        : "We could not verify this link. Sign in and request a new verification email.";
+    return (
+      <AuthFrame panelBody="Request a new verification email if you still need to activate your account.">
+        <p className="eyebrow mt-4 lg:mt-0">Email confirmation</p>
+        <h2 className="mt-2 text-2xl font-semibold tracking-tight">Verification is unavailable</h2>
+        <p className="mt-2 text-sm text-ink-muted">{message}</p>
+        <Link
+          href="/login?unverified=1"
+          className="mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-brand text-sm font-semibold text-white"
+        >
+          Back to sign in
+        </Link>
+      </AuthFrame>
+    );
+  }
 
   if (result.state === "ok") {
     return (
@@ -25,7 +47,7 @@ export default async function VerifyEmailPage({
         <h2 className="mt-2 text-2xl font-semibold tracking-tight">
           {result.alreadyVerified ? "This email is already verified." : "Your email is verified."}
         </h2>
-        <p className="mt-2 text-sm text-ink-muted">You can now sign in to Halo with your school account.</p>
+        <p className="mt-2 text-sm text-ink-muted">You can now sign in to CSS with your school account.</p>
         <Link
           href="/login"
           className="mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-brand text-sm font-semibold text-white"

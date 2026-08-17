@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSessionFromResponse } from "@/lib/auth/session";
 import { verifyPassword } from "@/lib/auth/password";
-import { AppError, errorResponse } from "@/lib/errors";
+import { AppError, errorResponse, publicErrorMessage } from "@/lib/errors";
 import { originFromRequest } from "@/lib/env";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
 
@@ -98,6 +98,13 @@ export async function POST(request: NextRequest) {
     await session.save();
     return response;
   } catch (error) {
+    const contentType = request.headers.get("content-type") ?? "";
+    if (!contentType.includes("application/json")) {
+      return redirectTo(
+        request,
+        `/login?error=${encodeURIComponent(publicErrorMessage(error))}`,
+      );
+    }
     return errorResponse(error);
   }
 }

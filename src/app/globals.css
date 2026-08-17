@@ -171,3 +171,195 @@ textarea {
 .hero-float {
   animation: fade-up 700ms var(--ease) both;
 }
+
+/* Marketing landing (halo-light) — scoped so admin stays on the navy tokens. */
+.marketing-shell {
+  --canvas: #ffffff;
+  --surface: #ffffff;
+  --ink: #14142b;
+  --ink-soft: #3d3d5c;
+  --ink-muted: #6e7191;
+  --line: rgba(20, 20, 43, 0.09);
+  --line-strong: rgba(20, 20, 43, 0.16);
+  --brand: #6c5ce7;
+  --brand-2: #4b2fcb;
+  --accent: #2f5bff;
+  --shadow: 0 30px 70px -30px rgba(20, 20, 43, 0.22), 0 2px 8px rgba(20, 20, 43, 0.04);
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.marketing-shell h1,
+.marketing-shell h2,
+.marketing-shell h3 {
+  font-family: var(--font-instrument), var(--font-geist-sans), ui-sans-serif, sans-serif;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.marketing-shell .eyebrow {
+  font-family: var(--font-plex), var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: #4b2fcb;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.marketing-shell .eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #6c5ce7;
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+}
+
+.marketing-shell .eyebrow-dark {
+  color: #c9c2ff;
+}
+
+.marketing-shell .eyebrow-dark::before {
+  background: #c9c2ff;
+  box-shadow: 0 0 0 3px rgba(201, 194, 255, 0.18);
+}
+
+.marketing-shell .marketing-mark {
+  background: linear-gradient(135deg, #6c5ce7, #2f5bff) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 14px -2px rgba(108, 92, 231, 0.5);
+}
+
+.marketing-btn-primary {
+  background: linear-gradient(135deg, #6c5ce7, #4b2fcb);
+  color: #fff;
+  box-shadow: 0 10px 24px -8px rgba(108, 92, 231, 0.55);
+}
+
+.marketing-btn-primary:hover {
+  box-shadow: 0 16px 32px -8px rgba(108, 92, 231, 0.65);
+}
+
+.hero-grid-fade {
+  background-image:
+    linear-gradient(rgba(20, 20, 43, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 20, 43, 0.09) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 900px 500px at 20% 20%, black 10%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 900px 500px at 20% 20%, black 10%, transparent 70%);
+}
+
+.scan-ripple::before,
+.scan-ripple::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid #6c5ce7;
+  opacity: 0;
+  animation: marketing-ripple 2.4s cubic-bezier(0.22, 0.9, 0.35, 1) infinite;
+}
+
+.scan-ripple::after {
+  animation-delay: 1.2s;
+}
+
+@keyframes marketing-ripple {
+  0% {
+    transform: scale(0.72);
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+.marketing-marquee {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+  animation: marketing-marquee 26s linear infinite;
+}
+
+.marketing-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marketing-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marketing-cta {
+  background: linear-gradient(120deg, #5535d6, #2044d6, #5535d6);
+  background-size: 200% 200%;
+  animation: marketing-shift 8s ease infinite;
+}
+
+@keyframes marketing-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.finger-scan::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #b7aaff;
+  top: 6%;
+  box-shadow: 0 0 12px 2px rgba(183, 170, 255, 0.7);
+  animation: finger-scanline 2.6s ease-in-out infinite;
+}
+
+@keyframes finger-scanline {
+  0% {
+    top: 6%;
+    opacity: 1;
+  }
+  50% {
+    top: 92%;
+    opacity: 1;
+  }
+  51% {
+    opacity: 0;
+  }
+  52% {
+    top: 6%;
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    top: 6%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marketing-marquee,
+  .scan-ripple::before,
+  .scan-ripple::after,
+  .marketing-cta,
+  .finger-scan::before {
+    animation: none !important;
+  }
+}

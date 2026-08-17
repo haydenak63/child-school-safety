@@ -3,7 +3,7 @@ import { Reveal } from "@/components/marketing/reveal";
 
 export const metadata: Metadata = {
   title: "How it works",
-  description: "From student enrollment to parent notification, the Halo attendance journey.",
+  description: "From student enrollment to parent notification, the CSS attendance journey.",
   alternates: { canonical: "/how-it-works" },
 };
 
@@ -28,7 +28,7 @@ export default function HowItWorksPage() {
         <p className="eyebrow">Journey</p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight">From enrollment to the school gate.</h1>
         <p className="mt-4 text-sm leading-6 text-ink-muted">
-          Halo is designed as a repeating operational loop. The terminal stays open and returns to
+          CSS is designed as a repeating operational loop. The terminal stays open and returns to
           ready after each result.
         </p>
       </Reveal>
