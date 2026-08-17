@@ -17,6 +17,7 @@
 /.next/
 /out/
 next-build.zip
+next-build.tar.gz
 
 # production
 /build

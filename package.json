@@ -19,7 +19,7 @@
     "postinstall": "prisma generate"
   },
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "seed": "node prisma/seed.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",

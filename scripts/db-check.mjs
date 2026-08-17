@@ -1,24 +1,7 @@
 // Standalone check that the Prisma query engine can load and run on this host.
 // Deliberately plain .mjs so it runs on bare `node` without tsx or any bundler.
 import { PrismaClient } from "@prisma/client";
-import { readFileSync } from "node:fs";
-
-function loadDotEnv(file = ".env") {
-  try {
-    for (const line of readFileSync(file, "utf8").split(/\r?\n/)) {
-      if (!line || line.trimStart().startsWith("#") || !line.includes("=")) continue;
-      const i = line.indexOf("=");
-      const key = line.slice(0, i).trim();
-      const value = line
-        .slice(i + 1)
-        .trim()
-        .replace(/^["']|["']$/g, "");
-      if (!(key in process.env)) process.env[key] = value;
-    }
-  } catch {
-    // .env is optional when the environment is already populated
-  }
-}
+import { loadDotEnv } from "./load-env.mjs";
 
 loadDotEnv();
 

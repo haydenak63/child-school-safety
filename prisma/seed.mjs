@@ -1,14 +1,21 @@
+// Plain .mjs rather than .ts on purpose. Running the seed through tsx spawns an
+// extra esbuild process, and on CloudLinux the per-account LVE process/thread
+// cap then starves the Prisma query engine's timer thread, which crashes the
+// engine with "PANIC: timer has gone away" on the first query.
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import { createCipheriv, createHash, randomBytes } from "crypto";
+import { createCipheriv, createHash, randomBytes } from "node:crypto";
+import { loadDotEnv } from "../scripts/load-env.mjs";
+
+loadDotEnv();
 
 const prisma = new PrismaClient();
 
-function hashToken(token: string): string {
+function hashToken(token) {
   return createHash("sha256").update(token).digest("hex");
 }
 
-function encryptString(plaintext: string): string {
+function encryptString(plaintext) {
   const secret = process.env.AUTH_SECRET;
   if (!secret || secret.length < 32) {
     throw new Error("AUTH_SECRET must be at least 32 characters.");
@@ -21,7 +28,7 @@ function encryptString(plaintext: string): string {
   return Buffer.concat([iv, tag, encrypted]).toString("base64url");
 }
 
-function token(): string {
+function token() {
   return randomBytes(32).toString("base64url");
 }
 
